@@ -37,10 +37,10 @@ jobs:
       - name: Install Python ${{ matrix.python-version }}
         run: uv python install ${{ matrix.python-version }}
 
-      - name: Install Task
-        uses: go-task/setup-task@a00fbb05ce67b35648be3c78cbc9fd85354c757e # v2
+      - name: Install mise
+        uses: jdx/mise-action@v2
         with:
-          version: "3.54.0"
+          install: false
 
       - name: Cache prek
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
@@ -51,11 +51,13 @@ jobs:
             prek-${{ runner.os }}-py${{ matrix.python-version }}-
 
       - name: Setup environment
-        run: task dev-setup:venv
+        run: uv sync
         env:
           UV_PYTHON: ${{ matrix.python-version }}
+          MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}
 
       - name: Run tests
-        run: task test
+        run: mise run test
         env:
           UV_PYTHON: ${{ matrix.python-version }}
+          MISE_TRUSTED_CONFIG_PATHS: ${{ github.workspace }}

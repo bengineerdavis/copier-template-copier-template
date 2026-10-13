@@ -27,10 +27,10 @@ tests:
     - curl -LsSf https://astral.sh/uv/0.13.0/install.sh | sh
     - source $HOME/.local/bin/env
     - uv python install $PYTHON_VERSION
-    - sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b ~/.local/bin v3.54.0
-    - task dev-setup:venv
+    - curl -fsSL https://mise.run | sh
+    - uv sync
   script:
-    - task test
+    - mise run test
   cache:
     - key: tests-uv-py$PYTHON_VERSION
       paths:
@@ -65,3 +65,5 @@ release:
     - key: release-uv
       paths:
         - ${UV_CACHE_DIR}
+
+# note: CI sets MISE_TRUSTED_CONFIG_PATHS="$CI_PROJECT_DIR" in the job environment

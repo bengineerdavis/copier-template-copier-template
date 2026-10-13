@@ -9,17 +9,17 @@ A Copier **meta-template**: a template (`meta_template/`) that generates other C
 Examples
 
 ```sh
-task dev-setup   # Install pre-commit hooks and uv dependencies
-task test        # Run the full test suite
-task cog         # Regenerate cogapp-managed files (e.g. .gitignore)
-task --list      # See all project commmands
+mise run install # Install prek hooks and uv dependencies
+mise run test    # Run the full test suite
+mise run cog     # Regenerate cogapp-managed files (e.g. .gitignore)
+mise tasks       # See all project commands
 ```
 
 Pass additional args to pytest via `--`:
 
 ```sh
-task test -- -k test_name_here
-task test -- tests/test_copy.py -v
+mise run test -- -k test_name_here
+mise run test -- tests/test_copy.py -v
 ```
 
 ## Architecture

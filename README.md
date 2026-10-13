@@ -9,7 +9,7 @@ A [Copier](https://copier.readthedocs.io/) meta-template — a template that sca
 
 - **Best Practices:** template in subdirectory, [multiple (composable) template compatibility](https://copier.readthedocs.io/en/stable/configuring/#applying-multiple-templates-to-the-same-subproject)
 - **Test harness included** pytest setup with examples and helpers, ready to test your template, and it's usage
-- **Modern Batteries included** uv, semantic release, Renovate, and [go-task](https://taskfile.dev/) automation all preconfigured
+- **Modern Batteries included** uv, semantic release, Renovate, and [mise](https://mise.jdx.dev/) automation all preconfigured
 - **CI/CD out of the box** Supports GitLab CI or GitHub Actions, with matrix testing across Python versions
 - **Optional Copier extensions**
     - [Pydantic validation](https://pypi.org/project/copier-pydantic/) for answers
@@ -53,9 +53,9 @@ For non-interactive updates, use `--skip-answered` to reuse all existing answers
 
 ## Development
 
-Prerequisites: [uv](https://docs.astral.sh/uv/) and [Task](https://taskfile.dev/).
+Prerequisites: [uv](https://docs.astral.sh/uv/) and [mise](https://mise.jdx.dev/).
 
-Run `task --list` to see available commands. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide.
+Run `mise tasks` to see available commands (mise is the task runner). See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide.
 
 ### Self-hosted
 

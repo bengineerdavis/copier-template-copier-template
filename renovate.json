@@ -40,9 +40,9 @@
         "/\\.gitlab-ci\\.ya?ml(\\.tmpl)?$/"
       ],
       "matchStrings": [
-        "https://taskfile\\.dev/install\\.sh.*?(?<currentValue>v[\\d.]+)"
+        "https://mise\\.run.*?v(?<currentValue>v[\\d.]+)"
       ],
-      "depNameTemplate": "go-task/task",
+      "depNameTemplate": "jdx/mise",
       "datasourceTemplate": "github-releases"
     },
     {
@@ -51,9 +51,9 @@
         "/workflows/[^/]+\\.ya?ml$/"
       ],
       "matchStrings": [
-        "setup-task@[^\\n]+\\n\\s+with:\\n\\s+version:\\s*\"(?<currentValue>[^\"]+)\""
+        "mise-action@[^\\n]+\\n\\s+with:\\n\\s+version:\\s*\"(?<currentValue>[^\"]+)\""
       ],
-      "depNameTemplate": "go-task/task",
+      "depNameTemplate": "jdx/mise",
       "datasourceTemplate": "github-releases"
     },
     {
@@ -73,9 +73,9 @@
         "/workflows/[^/]+\\.ya?ml(\\.tmpl)?$/"
       ],
       "matchStrings": [
-        "setup-task@[^\\n]+\\n\\s+with:\\n\\s+version:\\s*\"(?<currentValue>[^\"]+)\""
+        "mise-action@[^\\n]+\\n\\s+with:\\n\\s+version:\\s*\"(?<currentValue>[^\"]+)\""
       ],
-      "depNameTemplate": "go-task/task",
+      "depNameTemplate": "jdx/mise",
       "datasourceTemplate": "github-releases"
     },
     {
@@ -137,7 +137,7 @@
     },
     {
       "matchPackageNames": [
-        "go-task/task"
+        "jdx/mise"
       ],
       "automerge": true
     }

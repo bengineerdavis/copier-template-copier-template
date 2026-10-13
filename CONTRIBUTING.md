@@ -2,13 +2,13 @@
 
 ## Dev setup
 
-Prerequisites: [uv](https://docs.astral.sh/uv/) and [Task](https://taskfile.dev/).
+Prerequisites: [uv](https://docs.astral.sh/uv/) and [mise](https://mise.jdx.dev/).
 
 ```bash
-task dev-setup
+mise run install
 ```
 
-Run `task --list` to see all available commands.
+Run `mise tasks` to see all available commands.
 
 ### Optional dependencies
 
@@ -24,7 +24,7 @@ There are two test suites:
 Run both with:
 
 ```bash
-task test
+mise run test
 ```
 
 ## Releases
@@ -32,7 +32,7 @@ task test
 Releases are automated via [python-semantic-release](https://python-semantic-release.readthedocs.io/). Preview what the next release would look like with:
 
 ```bash
-task release
+mise run release-dry
 ```
 
 ### CI setup
@@ -41,12 +41,12 @@ The release workflow uses the built-in `GITHUB_TOKEN`. If your default branch re
 
 ## Making changes
 
-Template files live under `meta_template/`. After making changes, run `task test` to verify everything works.
+Template files live under `meta_template/`. After making changes, run `mise run test` to verify everything works.
 
 To pull in upstream improvements from the meta-template:
 
 ```bash
 copier update --answers-file .copier-answers.copier-template.yml
 # or
-task copier-template:template:update
+mise run update-template
 ```
