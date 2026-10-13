@@ -3,12 +3,30 @@ name = "<<output_template_name>>-copier-template"
 version = "0.0.0"
 description = "Copier template for <<output_template_name>>"
 readme = "README.md"
-<% if license_type == 'mit' %>
+<% if license_type == 'MIT' %>
 license = "MIT"
-<% elif license_type == 'apache-2.0' %>
+<% elif license_type == 'Apache-2.0' %>
 license = "Apache-2.0"
-<% elif license_type == 'unlicense' %>
+<% elif license_type == 'BSD-2-Clause' %>
+license = "BSD-2-Clause"
+<% elif license_type == 'BSD-3-Clause' %>
+license = "BSD-3-Clause"
+<% elif license_type == 'ISC' %>
+license = "ISC"
+<% elif license_type == 'MPL-2.0' %>
+license = "MPL-2.0"
+<% elif license_type == '0BSD' %>
+license = "0BSD"
+<% elif license_type == 'CC0-1.0' %>
+license = "CC0-1.0"
+<% elif license_type == 'Unlicense' %>
 license = "Unlicense"
+<% elif license_type == 'GPL-3.0-only' %>
+license = "GPL-3.0-only"
+<% elif license_type == 'LGPL-3.0-only' %>
+license = "LGPL-3.0-only"
+<% elif license_type == 'AGPL-3.0-only' %>
+license = "AGPL-3.0-only"
 <% endif %>
 <% if license %>
 license-files = ["LICENSE"]

@@ -88,13 +88,22 @@ python_versions:
 
 license_type:
   type: str
-  help: License for the generated template (see https://choosealicense.com)
+  help: License for the generated template (SPDX identifier; texts verbatim from spdx/license-list-data)
   choices:
-    MIT: mit
-    Apache 2.0: apache-2.0
-    The Unlicense: unlicense
+    MIT License: MIT
+    Apache License 2.0: Apache-2.0
+    BSD 2-Clause "Simplified" License: BSD-2-Clause
+    BSD 3-Clause "New" or "Revised" License: BSD-3-Clause
+    ISC License: ISC
+    Mozilla Public License 2.0: MPL-2.0
+    BSD Zero Clause License: 0BSD
+    Creative Commons Zero v1.0 Universal: CC0-1.0
+    The Unlicense: Unlicense
+    GNU General Public License v3.0 only: GPL-3.0-only
+    GNU Lesser General Public License v3.0 only: LGPL-3.0-only
+    GNU Affero General Public License v3.0 only: AGPL-3.0-only
     None: none
-  default: mit
+  default: MIT
 
 license:
   type: bool
@@ -104,12 +113,12 @@ license:
 copyright_year:
   type: str
   default: "<< '%Y' | strftime >>"
-  when: "<< license and license_type not in ['none', 'unlicense'] >>"
+  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0'] >>"
 
 copyright_name:
   type: str
   placeholder: "Your Name"
-  when: "<< license and license_type not in ['none', 'unlicense'] >>"
+  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0'] >>"
 
 needs_extensions:
   type: bool

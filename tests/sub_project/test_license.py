@@ -28,7 +28,7 @@ def test_default_mit_license(sub_project: Path) -> None:
 
 @pytest.mark.parametrize(
     'sub_project',
-    [{'license_type': 'apache-2.0'}],
+    [{'license_type': 'Apache-2.0'}],
     indirect=True,
 )
 def test_apache_license(sub_project: Path) -> None:
@@ -47,7 +47,7 @@ def test_apache_license(sub_project: Path) -> None:
 
 @pytest.mark.parametrize(
     'sub_project',
-    [{'license_type': 'unlicense'}],
+    [{'license_type': 'Unlicense'}],
     indirect=True,
 )
 def test_unlicense(sub_project: Path) -> None:
@@ -78,3 +78,17 @@ def test_no_license(sub_project: Path) -> None:
         pyproject = tomllib.load(f)
     assert 'license' not in pyproject['project']
     assert 'license-files' not in pyproject['project']
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [{'license_type': 'BSD-3-Clause'}],
+    indirect=True,
+)
+def test_bsd3_license(sub_project: Path) -> None:
+    license_file = sub_project / 'LICENSE'
+    assert license_file.exists()
+    assert 'Redistribution and use' in license_file.read_text()
+    with (sub_project / 'pyproject.toml').open('rb') as f:
+        pyproject = tomllib.load(f)
+    assert pyproject['project']['license'] == 'BSD-3-Clause'
