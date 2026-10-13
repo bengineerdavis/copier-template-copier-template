@@ -86,6 +86,7 @@ python_versions:
   default: "<< all_python_versions[all_python_versions.index(min_python_version):] >>"
   when: false
 
+# Plain-language licenses from the Blue Oak Council — https://blueoakcouncil.org
 license_type:
   type: str
   help: License for the generated template (SPDX identifier; texts verbatim from spdx/license-list-data)
@@ -95,6 +96,7 @@ license_type:
     BSD 2-Clause "Simplified" License: BSD-2-Clause
     BSD 3-Clause "New" or "Revised" License: BSD-3-Clause
     ISC License: ISC
+    Blue Oak Model License 1.0.0: BlueOak-1.0.0
     Mozilla Public License 2.0: MPL-2.0
     BSD Zero Clause License: 0BSD
     Creative Commons Zero v1.0 Universal: CC0-1.0
@@ -113,12 +115,12 @@ license:
 copyright_year:
   type: str
   default: "<< '%Y' | strftime >>"
-  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0'] >>"
+  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0', 'BlueOak-1.0.0'] >>"
 
 copyright_name:
   type: str
   placeholder: "Your Name"
-  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0'] >>"
+  when: "<< license and license_type not in ['none', 'Unlicense', 'CC0-1.0', 'BlueOak-1.0.0'] >>"
 
 needs_extensions:
   type: bool

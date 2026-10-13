@@ -92,3 +92,17 @@ def test_bsd3_license(sub_project: Path) -> None:
     with (sub_project / 'pyproject.toml').open('rb') as f:
         pyproject = tomllib.load(f)
     assert pyproject['project']['license'] == 'BSD-3-Clause'
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [{'license_type': 'BlueOak-1.0.0'}],
+    indirect=True,
+)
+def test_blue_oak_license(sub_project: Path) -> None:
+    license_file = sub_project / 'LICENSE'
+    assert license_file.exists()
+    assert 'Blue Oak Model License' in license_file.read_text()
+    with (sub_project / 'pyproject.toml').open('rb') as f:
+        pyproject = tomllib.load(f)
+    assert pyproject['project']['license'] == 'BlueOak-1.0.0'
