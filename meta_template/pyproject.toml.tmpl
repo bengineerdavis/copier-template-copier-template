@@ -3,7 +3,7 @@ name = "<<output_template_name>>-copier-template"
 version = "0.0.0"
 description = "Copier template for <<output_template_name>>"
 readme = "README.md"
-<% if license_type == 'MIT' %>
+<% if license and not license_type.startswith('FSL') %><% if license_type == 'MIT' %>
 license = "MIT"
 <% elif license_type == 'Apache-2.0' %>
 license = "Apache-2.0"
@@ -29,6 +29,8 @@ license = "GPL-3.0-only"
 license = "LGPL-3.0-only"
 <% elif license_type == 'AGPL-3.0-only' %>
 license = "AGPL-3.0-only"
+<% endif %><% endif %><% if license_type.startswith('FSL') %>
+# FSL-1.1 identifiers are not SPDX-listed; the PEP 639 license key is omitted
 <% endif %>
 <% if license %>
 license-files = ["LICENSE"]

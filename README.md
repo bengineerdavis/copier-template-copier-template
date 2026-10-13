@@ -8,7 +8,7 @@ A [Copier](https://copier.readthedocs.io/) meta-template — a template that sca
 ## Features
 
 - **Best Practices:** template in subdirectory, [multiple (composable) template compatibility](https://copier.readthedocs.io/en/stable/configuring/#applying-multiple-templates-to-the-same-subproject)
-- **Plain-language licensing** [SPDX](https://spdx.org/licenses/) options including the [Blue Oak Model License](https://blueoakcouncil.org/license/1.0.0) — the [Blue Oak Council's](https://blueoakcouncil.org) plain-English alternative to MIT/Apache
+- **Plain-language licensing** [SPDX](https://spdx.org/licenses/) options including the [Blue Oak Model License](https://blueoakcouncil.org/license/1.0.0) — the [Blue Oak Council's](https://blueoakcouncil.org) plain-English alternative to MIT/Apache, plus the [Functional Source License](https://fsl.software) from [Fair Source](https://fair.io)
 - **Test harness included** pytest setup with examples and helpers, ready to test your template, and it's usage
 - **Modern Batteries included** uv, semantic release, Renovate, and [mise](https://mise.jdx.dev/) automation all preconfigured
 - **CI/CD out of the box** Supports GitLab CI or GitHub Actions, with matrix testing across Python versions

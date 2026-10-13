@@ -106,3 +106,20 @@ def test_blue_oak_license(sub_project: Path) -> None:
     with (sub_project / 'pyproject.toml').open('rb') as f:
         pyproject = tomllib.load(f)
     assert pyproject['project']['license'] == 'BlueOak-1.0.0'
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [{'license_type': 'FSL-1.1-MIT'}],
+    indirect=True,
+)
+def test_fsl_license(sub_project: Path) -> None:
+    license_file = sub_project / 'LICENSE'
+    assert license_file.exists()
+    text = license_file.read_text()
+    assert 'Functional Source License' in text
+    assert 'FSL-1.1-MIT' in text
+    with (sub_project / 'pyproject.toml').open('rb') as f:
+        pyproject = tomllib.load(f)
+    assert 'license' not in pyproject['project']
+    assert pyproject['project']['license-files'] == ['LICENSE']

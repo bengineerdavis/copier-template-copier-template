@@ -53,5 +53,5 @@ Run `mise tasks` to see available commands (mise is the task runner). See [CONTR
 <% if license %>
 ## License
 
-Distributed under the `<< license_type >>` license — see [LICENSE](LICENSE).<% if license_type == 'BlueOak-1.0.0' %> Read it in plain language at the [Blue Oak Council](https://blueoakcouncil.org).<% endif %>
+Distributed under the `<< license_type >>` license — see [LICENSE](LICENSE).<% if license_type == 'BlueOak-1.0.0' %> Read it in plain language at the [Blue Oak Council](https://blueoakcouncil.org).<% elif license_type.startswith('FSL') %> Read about the Functional Source License at [fsl.software](https://fsl.software), part of [Fair Source](https://fair.io).<% endif %>
 <% endif %>

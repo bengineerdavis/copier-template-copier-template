@@ -87,6 +87,8 @@ python_versions:
   when: false
 
 # Plain-language licenses from the Blue Oak Council — https://blueoakcouncil.org
+# Fair Source licenses (FSL; converts to MIT/Apache-2.0 after 2 years) — https://fsl.software, https://fair.io
+# FSL identifiers are not in the SPDX list; the generated pyproject omits the license key for them
 license_type:
   type: str
   help: License for the generated template (SPDX identifier; texts verbatim from spdx/license-list-data)
@@ -104,6 +106,8 @@ license_type:
     GNU General Public License v3.0 only: GPL-3.0-only
     GNU Lesser General Public License v3.0 only: LGPL-3.0-only
     GNU Affero General Public License v3.0 only: AGPL-3.0-only
+    Functional Source License 1.1 (MIT future): FSL-1.1-MIT
+    Functional Source License 1.1 (Apache-2.0 future): FSL-1.1-ALv2
     None: none
   default: MIT
 
