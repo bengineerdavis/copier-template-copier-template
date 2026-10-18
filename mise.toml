@@ -48,14 +48,14 @@ uv lock --upgrade
 description = "Update this repo from its own template (self-hosted)"
 run = '''
 #!/usr/bin/env bash
-uv run copier update -a .copier-answers.copier-template.yml "$@"
+uv run copier update -a .copier-answers.copier-template.yml --vcs-ref HEAD "$@"
 '''
 
 [tasks.update-template-auto]
 description = "Update from upstream with existing answers (non-interactive)"
 run = '''
 #!/usr/bin/env bash
-uv run copier update -a .copier-answers.copier-template.yml -A "$@"
+uv run copier update -a .copier-answers.copier-template.yml -A --vcs-ref HEAD "$@"
 '''
 
 [tasks.template-current]
