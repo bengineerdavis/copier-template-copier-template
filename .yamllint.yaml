@@ -8,9 +8,7 @@ rules:
       .github/workflows/*.yml
   document-start:
     ignore: |
-      .pre-commit-config.yaml
       copier.yml
-      Taskfile.yaml
       .copier-answers.*.yml
       .gitlab-ci.yml
   new-line-at-end-of-file: disable

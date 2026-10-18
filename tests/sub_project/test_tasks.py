@@ -10,8 +10,6 @@ import pytest
 from plumbum import local
 from plumbum.cmd import docker, mise, uv
 
-from tests.helpers import git_save
-
 
 def _docker_daemon_available() -> bool:
     code, _, _ = docker['info'].run(retcode=None)
@@ -33,11 +31,8 @@ def _isolated_mise_env(sub_project: Path) -> dict[str, str]:
 
 
 def test_dev_setup(sub_project: Path) -> None:
-    with local.cwd(sub_project):
-        (uv['run', 'prek', 'sample-config'] > '.pre-commit-config.yaml')()
-        git_save(sub_project)
-        with local.env(**_isolated_mise_env(sub_project)):
-            mise['run', '--skip-tools', 'install']()
+    with local.cwd(sub_project), local.env(**_isolated_mise_env(sub_project)):
+        mise['run', '--skip-tools', 'install']()
 
 
 @pytest.mark.skipif(

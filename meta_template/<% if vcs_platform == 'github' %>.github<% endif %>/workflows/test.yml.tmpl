@@ -46,7 +46,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.PREK_HOME }}
-          key: prek-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('.pre-commit-config.yaml') }}
+          key: prek-${{ runner.os }}-py${{ matrix.python-version }}-${{ hashFiles('prek.toml') }}
           restore-keys: |
             prek-${{ runner.os }}-py${{ matrix.python-version }}-
 

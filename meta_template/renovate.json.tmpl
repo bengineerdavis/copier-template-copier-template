@@ -54,6 +54,18 @@
       ],
       "depNameTemplate": "jdx/mise",
       "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/(^|/)prek\\.toml$/"
+      ],
+      "matchStrings": [
+        "repo\\s*=\\s*\"https://github\\.com/(?<depName>[^/\"]+/[^\"]+?)(?:\\.git)?\"\\s*\\n\\s*rev\\s*=\\s*\"(?<currentValue>v?[\\d.]+[\\w.+-]*)\""
+      ],
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "loose",
+      "depTypeTemplate": "prek-hook"
     }
   ],
   "packageRules": [
@@ -105,6 +117,13 @@
       "matchPackageNames": [
         "jdx/mise"
       ],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": [
+        "prek-hook"
+      ],
+      "groupName": "prek hooks",
       "automerge": true
     }
   ],

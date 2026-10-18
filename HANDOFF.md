@@ -1,4 +1,4 @@
-# HANDOFF — fork state (2026-10-13)
+# HANDOFF — fork state (2026-10-18)
 
 Scope: this repository only — the customized fork of
 cbrown1234/copier-template-copier-template. Project-family context lives in
@@ -25,6 +25,21 @@ each sibling's own HANDOFF (see Related repos below).
    `--skip-tools` and an isolated `MISE_GLOBAL_CONFIG_ROOT` so the suite
    does not depend on the developer's global mise config; the
    docker-mount test skips without a daemon. Suite: 31 passed / 2 skipped.
+4. **prek-native hooks folded in** (2026-10-18): the template now
+   generates `prek.toml` (prek's native TOML config), `.yamllint.yaml`,
+   and a `pre-commit` GitHub Actions workflow. This removes the
+   composition dependency on the private
+   `git@gitlab.com:browniantech/pre-commit-copier-template` — its
+   `.copier-answers.pre-commit.yml` was deleted, so every scaffolded
+   project's update path is now fully under our control. While porting,
+   the go-task-era `check-taskfile` hook and the stale
+   `scripts/install-task.sh` shellcheck exclude were dropped, the
+   broken `prek auto-update` mise task was fixed to `prek update`
+   (renamed in prek 0.5.x), and `prek>=0.5.5` became the floor (prek.toml
+   needs 0.5+). Renovate keeps hook revs fresh via a custom regex
+   manager on `prek.toml` (depType `prek-hook`, grouped + automerged) —
+   native support is pending in renovatebot/renovate#42254; swap the
+   custom manager out when it lands.
 
 ## Upstream sync strategy (open decision)
 
@@ -44,6 +59,9 @@ without the maintainer's buy-in — it is opinionated.
 - Inline TOML tables must stay single-line; long hook entries become
   `[[repos.hooks]]` sub-tables (tombi-format expands inline tables into
   invalid TOML otherwise).
+- prek hook config is `prek.toml` (native TOML, checked by the
+  `check-toml` hook); `.tmpl` files are skipped by hooks because the
+  suffix defeats file-type detection.
 - After moving this repo, re-run `mise trust` and delete/recreate `.venv`
   (uv sync) — stale absolute paths fail to spawn.
 

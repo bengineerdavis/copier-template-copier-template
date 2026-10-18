@@ -62,6 +62,6 @@ Run `mise tasks` to see available commands (mise is the task runner). See [CONTR
 
 This repo uses itself. See `.copier-answers.copier-template.yml` for the answers used.
 
-### Pre-commit composition
+### Git hooks
 
-This template does not generate a `.pre-commit-config.yaml`. Pre-commit configuration is expected to be handled by a separate template that composes with this one.
+Generated projects get a prek-native `prek.toml` (https://prek.j178.dev) with a curated hook set, a `pre-commit` GitHub Actions workflow, and a `.yamllint.yaml`. Hooks run with [prek](https://github.com/j178/prek) (`mise run lint`); pinned hook revisions are kept current by Renovate (custom regex manager for `prek.toml`) and by `mise run maintenance` (`prek update`).

@@ -25,6 +25,9 @@ def test_copy_default(
         unsafe=True,  # set to False if unsafe features not needed for template
     )
     assert (tmp_path / worker.answers_relpath).exists()
+    assert (tmp_path / 'prek.toml').exists()
+    assert (tmp_path / '.yamllint.yaml').exists()
+    assert (tmp_path / '.github' / 'workflows' / 'pre-commit.yml').exists()
 
 
 @pytest.mark.skipif(is_git_repo_dirty(), reason='Fail on dirty repo')
