@@ -1,6 +1,6 @@
 # Changes here will be managed by Copier; NEVER EDIT MANUALLY
-_commit: v0.18.1
-_src_path: git@github.com:cbrown1234/copier-template-copier-template.git
+_commit: 90fa5d3a7f2f2dafd4892afd53f030aa9ed1b4a8
+_src_path: git@github.com:bengineerdavis/copier-template-copier-template.git
 copyright_name: Christopher Brown
 copyright_year: '2026'
 include_pydantic_validation: false

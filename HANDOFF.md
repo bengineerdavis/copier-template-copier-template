@@ -41,14 +41,18 @@ each sibling's own HANDOFF (see Related repos below).
    native support is pending in renovatebot/renovate#42254; swap the
    custom manager out when it lands.
 
-## Upstream sync strategy (open decision)
+## Upstream sync strategy (RESOLVED 2026-10-18 — detached)
 
-The fork diverges from upstream in the task runner and licensing. Options,
-in order of preference: (a) keep `upstream` remote and merge selectively,
-accepting conflict churn in Taskfile-shaped areas; (b) detach if this
-template joins the copier-cat monorepo (cc Phase 3), at which point
-upstream sync stops being a goal. Do not contribute the mise swap upstream
-without the maintainer's buy-in — it is opinionated.
+The fork diverges from upstream in the task runner, licensing, and the
+prek hook layer. Decision: **detach** — `.copier-answers.copier-template.yml`
+now points at this fork (`origin`, `_commit` = the SHA that introduced the
+prek fold-in), so `copier update` / `mise run update-template` renders
+from our own template: true self-hosting. Upstream improvements are
+cherry-picked by hand from the `upstream` remote (kept configured for
+that purpose). Do not contribute the mise swap upstream without the
+maintainer's buy-in — it is opinionated; the licensing expansion may
+still go upstream separately (see next steps). When the fork cuts its
+own first semantic-release tag, move `_commit` off the raw SHA onto it.
 
 ## Gotchas learned here
 
@@ -71,7 +75,8 @@ without the maintainer's buy-in — it is opinionated.
   it (and note that generated templates inherit mise + the expanded
   licensing).
 - When copier-cat's monorepo phase lands (cc ROADMAP Phase 3), migrate
-  this template into it and resolve the upstream-sync question.
+  this template into it. (Upstream sync already resolved: detached
+  2026-10-18 — see above.)
 - Consider upstreaming the licensing expansion alone (runner-agnostic) as
   a candidate PR to cbrown1234.
 

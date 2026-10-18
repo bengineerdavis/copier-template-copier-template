@@ -45,7 +45,7 @@ uv lock --upgrade
 '''
 
 [tasks.update-template]
-description = "Update this repo from the upstream meta-template"
+description = "Update this repo from its own template (self-hosted)"
 run = '''
 #!/usr/bin/env bash
 uv run copier update -a .copier-answers.copier-template.yml "$@"
