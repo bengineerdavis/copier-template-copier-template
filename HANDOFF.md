@@ -49,10 +49,12 @@ now points at this fork (`origin`, `_commit` = the SHA that introduced the
 prek fold-in), so `copier update` / `mise run update-template` renders
 from our own template: true self-hosting. Upstream improvements are
 cherry-picked by hand from the `upstream` remote (kept configured for
-that purpose). Do not contribute the mise swap upstream without the
-maintainer's buy-in — it is opinionated; the licensing expansion may
-still go upstream separately (see next steps). When the fork cuts its
-own first semantic-release tag, move `_commit` off the raw SHA onto it.
+that purpose). Upstream contributions are declined (2026-10-18): the
+licensing expansion was validated to port cleanly (candidate branch
+discarded) but the author judges both it and the mise swap too far off
+the beaten path for the original maintainer — the fork keeps them, and
+`upstream` stays read-only. When the fork cuts its own first
+semantic-release tag, move `_commit` off the raw SHA onto it.
 
 ## Gotchas learned here
 
@@ -77,8 +79,13 @@ own first semantic-release tag, move `_commit` off the raw SHA onto it.
 - When copier-cat's monorepo phase lands (cc ROADMAP Phase 3), migrate
   this template into it. (Upstream sync already resolved: detached
   2026-10-18 — see above.)
-- Consider upstreaming the licensing expansion alone (runner-agnostic) as
-  a candidate PR to cbrown1234.
+- ~~Consider upstreaming the licensing expansion alone (runner-agnostic)
+  as a candidate PR to cbrown1234.~~ Declined (2026-10-18): these are
+  the author's own fork preferences, judged too far off the beaten path
+  for the original maintainer. A candidate branch was prepared and
+  validated (3 cherry-picks onto upstream/main, one conflict resolved,
+  renders + upstream's test_license.py green) then discarded — the
+  knowledge that it ports cleanly is retained here.
 
 ## Related repos (each has its own scoped handoff)
 
