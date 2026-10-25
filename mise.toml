@@ -1,31 +1,39 @@
-#:schema https://mise.jdx.dev/schema/mise.json
-
-# mise replaces the previous go-task Taskfile.yaml + taskfile/ includes.
-# mise is the runner; uv remains the provisioner (uv run / uvx inside tasks).
-# Task names are flat and hyphenated (mise forbids colons in task names).
-
 [tools]
 uv = "latest"
 python = "3.12"
+"npm:@sentry/dotagents" = "latest"
+"github:asamarts/alint" = "latest"
+"github:kenn-io/roborev" = "latest"
+prek = "0.5.2"
+tombi = "1.5.5"
+worktrunk = "0.80.0"
+
+[tools."http:opencode"]
+version = "2.0.32"
+
+[tools."http:opencode".platforms.linux-x64]
+url = "https://opencode.ai/files/bin/2.0.32/opencode-linux-x64-baseline.tar.gz"
+checksum = "sha256:8adfbefe1d697b5d1774ab8d31630303543aa0676b9aa15d94ceb8e80a5bff69"
+
+[tools."http:opencode".platforms.linux-arm64]
+url = "https://opencode.ai/files/bin/2.0.32/opencode-linux-arm64.tar.gz"
+checksum = "sha256:c2e4f6c94f2e58a2df99cc9647bd37285569600d7435e3796152825d8c9d10382"
+
+[tools."http:opencode".platforms.macos-x64]
+url = "https://opencode.ai/files/bin/2.0.32/opencode-darwin-x64-baseline.zip"
+checksum = "sha256:25f788c18d46664d6aac8983c1a412ec169d3ff87f754e93f5026b6d1d03da6b"
+
+[tools."http:opencode".platforms.macos-arm64]
+url = "https://opencode.ai/files/bin/2.0.32/opencode-darwin-arm64.zip"
+checksum = "sha256:e431e369025ba9554445d0ea8ad65457fbca59aa385ca790724ec6ab488d271b"
 
 [tasks.install]
 description = "Bootstrap dev setup: sync dependencies and register prek hooks"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-uv sync
-uv run prek install
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nuv sync\nuv run prek install\n"
 
 [tasks.test]
 description = "Run the pytest suite (tmp stored under ./tmp/pytest)"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-rm -rf ./tmp/pytest
-mkdir -p ./tmp
-uv run --frozen pytest --basetemp=./tmp/pytest/ "$@"
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nrm -rf ./tmp/pytest\nmkdir -p ./tmp\nuv run --frozen pytest --basetemp=./tmp/pytest/ \"$@\"\n"
 
 [tasks.cog]
 description = "Regenerate cogapp-managed files (e.g. .gitignore)"
@@ -37,90 +45,68 @@ run = "uv run prek run --all-files"
 
 [tasks.maintenance]
 description = "Update hooks and lockfile"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-uv run prek update
-uv lock --upgrade
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nuv run prek update\nuv lock --upgrade\n"
 
 [tasks.update-template]
 description = "Update this repo from its own template (self-hosted)"
-run = '''
-#!/usr/bin/env bash
-uv run copier update -a .copier-answers.copier-template.yml --vcs-ref HEAD "$@"
-'''
+run = "#!/usr/bin/env bash\nuv run copier update -a .copier-answers.copier-template.yml --vcs-ref HEAD \"$@\"\n"
 
 [tasks.update-template-auto]
 description = "Update from upstream with existing answers (non-interactive)"
-run = '''
-#!/usr/bin/env bash
-uv run copier update -a .copier-answers.copier-template.yml -A --vcs-ref HEAD "$@"
-'''
+run = "#!/usr/bin/env bash\nuv run copier update -a .copier-answers.copier-template.yml -A --vcs-ref HEAD \"$@\"\n"
 
 [tasks.template-current]
 description = "Render the current template into tmp/current"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-rm -rf tmp/current
-uv run copier copy --vcs-ref HEAD . tmp/current
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nrm -rf tmp/current\nuv run copier copy --vcs-ref HEAD . tmp/current\n"
 
 [tasks.template-diff]
 description = "Compare last release render against HEAD render"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-rm -rf tmp/before tmp/after
-uv run copier copy . tmp/before
-uv run copier copy --vcs-ref HEAD . tmp/after
-diff -r tmp/before tmp/after
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nrm -rf tmp/before tmp/after\nuv run copier copy . tmp/before\nuv run copier copy --vcs-ref HEAD . tmp/after\ndiff -r tmp/before tmp/after\n"
 
 [tasks.release-dry]
 description = "Dry-run release, e.g. mise run release-dry -- --minor"
-run = '''
-#!/usr/bin/env bash
-uv run python-semantic-release --noop version "$@"
-'''
+run = "#!/usr/bin/env bash\nuv run python-semantic-release --noop version \"$@\"\n"
 
 [tasks.release-actual]
 description = "Release a new version, e.g. mise run release-actual -- --minor"
-run = '''
-#!/usr/bin/env bash
-uv run python-semantic-release version "$@"
-git fetch
-'''
+run = "#!/usr/bin/env bash\nuv run python-semantic-release version \"$@\"\ngit fetch\n"
 
 [tasks.demo-record]
 description = "Record a demo of copier copy using asciinema (tmp/demo.cast)"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-mkdir -p tmp
-asciinema rec --overwrite tmp/demo.cast
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nmkdir -p tmp\nasciinema rec --overwrite tmp/demo.cast\n"
 
 [tasks.demo-upload]
 description = "Upload tmp/demo.cast to asciinema.org and update README.md"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-URL=$(asciinema upload tmp/demo.cast | tee /dev/tty | grep -oE 'https://asciinema\.org/a/[A-Za-z0-9]+')
-python3 -c "
-import re, sys
-url = sys.argv[1]
-readme = open('README.md').read()
-updated = re.sub(r'https://asciinema\.org/a/[A-Za-z0-9]+', url, readme)
-open('README.md', 'w').write(updated)
-print(f'Updated README.md with {url}')
-" "$URL"
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nURL=$(asciinema upload tmp/demo.cast | tee /dev/tty | grep -oE 'https://asciinema\\.org/a/[A-Za-z0-9]+')\npython3 -c \"\nimport re, sys\nurl = sys.argv[1]\nreadme = open('README.md').read()\nupdated = re.sub(r'https://asciinema\\.org/a/[A-Za-z0-9]+', url, readme)\nopen('README.md', 'w').write(updated)\nprint(f'Updated README.md with {url}')\n\" \"$URL\"\n"
 
 [tasks.example-docker]
 description = "Example: docker volume mount to inspect the project in CI"
-run = '''
-#!/usr/bin/env bash
-docker run -v "$(pwd)":/code/ --entrypoint=/bin/bash python:3.12-slim -c 'cat /code/pyproject.toml'
-'''
+run = "#!/usr/bin/env bash\ndocker run -v \"$(pwd)\":/code/ --entrypoint=/bin/bash python:3.12-slim -c 'cat /code/pyproject.toml'\n"
+
+[tasks.backlog-init]
+description = "Initialize the backlog task store (idempotent)"
+run = "#!/usr/bin/env bash\nset -euo pipefail\nif [ -f backlog/config.yml ]; then\n  echo \"backlog already initialized\"\n  exit 0\nfi\nuvx --from backlog-md-py backlog-py init --defaults\n"
+
+[tasks.dotagents-install]
+description = "Refresh dotagents managed state (skills, MCP, subagents)"
+run = "dotagents --project install"
+
+[tasks.roborev-start]
+description = "Ensure the roborev review daemon is running"
+run = "roborev start 2>/dev/null || roborev serve 2>/dev/null || true"
+
+[tasks.roborev-status]
+description = "Show open fast-loop findings for the current branch"
+run = "roborev status"
+
+[tasks.roborev-fix]
+description = "Hand open findings back to the live agent (fix while fresh)"
+run = "roborev fix"
+
+[tasks.review-deep]
+description = "Slow loop: deep review of the working branch, report to docs/reviews/"
+run = "#!/usr/bin/env bash\nset -euo pipefail\nmkdir -p docs/reviews\nopencode run --agent review-deep \"Run the review-deep agent procedure for this repository.\"\n"
+
+[tasks.check]
+description = "Structure enforcement: alint + tombi lint"
+run = "#!/usr/bin/env bash\nset -euo pipefail\nalint check\ntombi lint mise.toml\n"

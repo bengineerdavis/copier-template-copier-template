@@ -226,3 +226,11 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 # [[[end]]]
+
+# agentic-project-template (managed block — do not sort or dedupe by hand)
+mise.local.toml
+.consult-llm.local.yaml
+.roborev/
+# dotagents-managed artifacts (agents.lock is machine state, .agents/.gitignore is generated)
+agents.lock
+.agents/.gitignore

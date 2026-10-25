@@ -1,54 +1,85 @@
-# prek hook configuration — https://prek.j178.dev
-# Validate with: prek validate-config prek.toml
-# Update pinned revisions with: mise run maintenance (runs `prek update`)
-
 default_install_hook_types = [
-  "pre-commit",
-  "commit-msg",
+    "pre-commit",
+    "commit-msg",
 ]
 
 [[repos]]
 repo = "https://github.com/pre-commit/pre-commit-hooks"
 rev = "v6.0.0"
-hooks = [
-  { id = "end-of-file-fixer" },
-  { id = "trailing-whitespace" },
-  { id = "check-added-large-files" },
-  { id = "check-yaml" },
-  { id = "check-toml" },
-  { id = "check-json" },
-  { id = "check-case-conflict" },
-  { id = "check-executables-have-shebangs" },
-  { id = "check-merge-conflict", args = ["--assume-in-merge"] },
+
+[[repos.hooks]]
+id = "end-of-file-fixer"
+
+[[repos.hooks]]
+id = "trailing-whitespace"
+
+[[repos.hooks]]
+id = "check-added-large-files"
+
+[[repos.hooks]]
+id = "check-yaml"
+
+[[repos.hooks]]
+id = "check-toml"
+
+[[repos.hooks]]
+id = "check-json"
+
+[[repos.hooks]]
+id = "check-case-conflict"
+
+[[repos.hooks]]
+id = "check-executables-have-shebangs"
+
+[[repos.hooks]]
+id = "check-merge-conflict"
+args = [
+    "--assume-in-merge",
 ]
 
 [[repos]]
 repo = "https://github.com/gitleaks/gitleaks"
 rev = "v8.30.1"
-hooks = [{ id = "gitleaks" }]
+hooks = [
+    { id = "gitleaks" },
+]
 
 [[repos]]
 repo = "https://github.com/astral-sh/ruff-pre-commit"
 rev = "v0.16.6"
-hooks = [
-  { id = "ruff-check", args = ["--fix"] },
-  { id = "ruff-format" },
+
+[[repos.hooks]]
+id = "ruff-check"
+args = [
+    "--fix",
 ]
+
+[[repos.hooks]]
+id = "ruff-format"
 
 [[repos]]
 repo = "https://github.com/astral-sh/uv-pre-commit"
 rev = "0.13.1"
-hooks = [{ id = "uv-lock" }]
+hooks = [
+    { id = "uv-lock" },
+]
 
 [[repos]]
 repo = "https://github.com/adrienverge/yamllint.git"
 rev = "v1.38.0"
-hooks = [{ id = "yamllint", args = ["--strict"] }]
+
+[[repos.hooks]]
+id = "yamllint"
+args = [
+    "--strict",
+]
 
 [[repos]]
 repo = "https://github.com/shellcheck-py/shellcheck-py"
 rev = "v0.11.0.1"
-hooks = [{ id = "shellcheck" }]
+hooks = [
+    { id = "shellcheck" },
+]
 
 [[repos]]
 repo = "https://github.com/python-jsonschema/check-jsonschema"
@@ -56,18 +87,58 @@ rev = "0.38.0"
 
 [[repos.hooks]]
 id = "check-github-workflows"
-args = ["--verbose"]
+args = [
+    "--verbose",
+]
 
 [[repos.hooks]]
 id = "check-gitlab-ci"
-args = ["--verbose"]
+args = [
+    "--verbose",
+]
 
 [[repos.hooks]]
 id = "check-renovate"
-args = ["--verbose"]
-additional_dependencies = ["pyjson5"]
+args = [
+    "--verbose",
+]
+additional_dependencies = [
+    "pyjson5",
+]
 
 [[repos]]
 repo = "https://github.com/compilerla/conventional-pre-commit"
 rev = "v4.4.0"
-hooks = [{ id = "conventional-pre-commit", stages = ["commit-msg"] }]
+
+[[repos.hooks]]
+id = "conventional-pre-commit"
+stages = [
+    "commit-msg",
+]
+
+[[repos]]
+repo = "https://github.com/tombi-toml/tombi-pre-commit"
+rev = "v1.2.0"
+
+[[repos.hooks]]
+id = "tombi-lint"
+args = [
+    "--offline",
+]
+
+[[repos.hooks]]
+id = "tombi-format"
+args = [
+    "--offline",
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "alint-check"
+name = "alint check"
+entry = "alint check"
+language = "system"
+pass_filenames = false
+always_run = true

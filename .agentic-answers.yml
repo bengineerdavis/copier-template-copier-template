@@ -1,0 +1,11 @@
+# Changes herein will be handled by `agentic-project-template update`.
+# Do not edit by hand; commit this file (it powers updates).
+_commit: 9c25e94
+_src_path: https://github.com/bengineerdavis/agentic-project-template.git
+description: A Copier meta-template with modern Python project tooling.
+extra_skills: []
+include_consult_llm: false
+include_git_ai: false
+mcp_servers: []
+project_name: copier-template-copier-template
+task_prefix: ctct

@@ -1,0 +1,2 @@
+post-start = "mise trust && mise run install"
+pre-merge = "mise run check"
