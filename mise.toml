@@ -54,6 +54,7 @@ uv run ruff format tests
 
 [tasks.format-check]
 description = "Verify Python formatting and lint cleanliness"
+wait_for = ["lint"]
 run = '''
 #!/usr/bin/env bash
 set -euo pipefail
@@ -63,6 +64,7 @@ uv run ruff check tests
 
 [tasks.type-check]
 description = "Type-check the template test harness"
+wait_for = ["lint"]
 run = "uv run mypy tests"
 
 [tasks.quality]

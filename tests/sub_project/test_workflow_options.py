@@ -27,6 +27,12 @@ def test_default_excludes_workflow_options(sub_project: Path) -> None:
     mise = _read_toml(sub_project / 'mise.toml')
     assert set(mise['tools']) == {'uv', 'python'}
     assert {'format', 'format-check', 'type-check', 'quality'} <= set(mise['tasks'])
+    assert mise['tasks']['format-check']['wait_for'] == ['lint']
+    assert mise['tasks']['type-check']['wait_for'] == ['lint']
+    assert (
+        'jdx/mise-action'
+        not in (sub_project / '.github/workflows/pre-commit.yml').read_text()
+    )
 
     pyproject = _read_toml(sub_project / 'pyproject.toml')
     assert 'mypy>=1.0,<2.0' in pyproject['dependency-groups']['dev']
@@ -61,6 +67,8 @@ def test_backlog_enabled(sub_project: Path, task_management: str) -> None:
     assert config['projectName'] == 'your-template-name-copier-template'
     assert config['autoCommit'] is False
     assert (sub_project / 'backlog/tasks').is_dir()
+    yamllint = yaml.safe_load((sub_project / '.yamllint.yaml').read_text())
+    assert 'backlog/config.yml' in yamllint['ignore']
 
     mise = _read_toml(sub_project / 'mise.toml')
     pyproject = _read_toml(sub_project / 'pyproject.toml')
@@ -94,6 +102,8 @@ def test_alint_enabled(sub_project: Path) -> None:
     assert any(
         hook['id'] == 'alint-check' for repo in local_repos for hook in repo['hooks']
     )
+    workflow = (sub_project / '.github/workflows/pre-commit.yml').read_text()
+    assert workflow.index('jdx/mise-action@v2') < workflow.index('j178/prek-action')
 
 
 @pytest.mark.parametrize(
