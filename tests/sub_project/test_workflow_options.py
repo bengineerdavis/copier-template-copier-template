@@ -102,8 +102,24 @@ def test_alint_enabled(sub_project: Path) -> None:
     assert any(
         hook['id'] == 'alint-check' for repo in local_repos for hook in repo['hooks']
     )
-    workflow = (sub_project / '.github/workflows/pre-commit.yml').read_text()
-    assert workflow.index('jdx/mise-action@v2') < workflow.index('j178/prek-action')
+    workflow = yaml.safe_load(
+        (sub_project / '.github/workflows/pre-commit.yml').read_text()
+    )
+    steps = workflow['jobs']['pre-commit']['steps']
+    mise_steps = [
+        step for step in steps if step.get('uses', '').startswith('jdx/mise-action@')
+    ]
+    assert len(mise_steps) == 1
+    assert mise_steps[0]['uses'] == (
+        'jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac'
+    )
+    assert mise_steps[0]['with'].get('install', True) is True
+    assert mise_steps[0]['with']['install_args'] == 'github:asamarts/alint'
+    assert steps.index(mise_steps[0]) < next(
+        index
+        for index, step in enumerate(steps)
+        if step.get('uses', '').startswith('j178/prek-action@')
+    )
 
 
 @pytest.mark.parametrize(
