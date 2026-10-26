@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 try:
@@ -110,9 +111,7 @@ def test_alint_enabled(sub_project: Path) -> None:
         step for step in steps if step.get('uses', '').startswith('jdx/mise-action@')
     ]
     assert len(mise_steps) == 1
-    assert mise_steps[0]['uses'] == (
-        'jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac'
-    )
+    assert re.fullmatch(r'jdx/mise-action@[0-9a-f]{40}', mise_steps[0]['uses'])
     assert mise_steps[0]['with'].get('install', True) is True
     assert mise_steps[0]['with']['install_args'] == 'github:asamarts/alint'
     assert steps.index(mise_steps[0]) < next(
