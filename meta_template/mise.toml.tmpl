@@ -6,6 +6,15 @@
 [tools]
 uv = "latest"
 python = "3.12"
+<% if include_openspec %>
+"npm:@fission-ai/openspec" = "1.15.0"
+<% endif %>
+<% if task_management == 'backlog-md' %>
+"npm:backlog.md" = "1.55.3"
+<% endif %>
+<% if include_alint %>
+"github:asamarts/alint" = "0.20.1"
+<% endif %>
 
 [tasks.install]
 description = "Bootstrap dev setup: sync dependencies and register prek hooks"
@@ -14,6 +23,9 @@ run = '''
 set -euo pipefail
 uv sync
 uv run prek install
+<% if include_openspec %>
+openspec init --tools agents
+<% endif %>
 '''
 
 [tasks.test]
@@ -29,6 +41,73 @@ uv run --frozen pytest --basetemp=./tmp/pytest/ "$@"
 [tasks.lint]
 description = "Run lints"
 run = "uv run prek run --all-files"
+
+[tasks.format]
+description = "Auto-fix lint findings and format Python"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+uv run ruff check --fix tests
+uv run ruff format tests
+'''
+
+[tasks.format-check]
+description = "Verify Python formatting and lint cleanliness"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+uv run ruff format --check tests
+uv run ruff check tests
+'''
+
+[tasks.type-check]
+description = "Type-check the template test harness"
+run = "uv run mypy tests"
+
+[tasks.quality]
+description = "Run all code-quality gates"
+depends = [
+  "lint",
+  "format-check",
+  "type-check",
+<% if include_alint %>
+  "alint-check",
+<% endif %>
+]
+<% if include_openspec %>
+
+[tasks.openspec-update]
+description = "Refresh OpenSpec agent skills after upgrading the CLI"
+run = "openspec update"
+<% endif %>
+<% if task_management != 'none' %>
+
+[tasks.backlog-list]
+description = "List repository tasks"
+<% if task_management == 'backlog-md' %>
+run = "backlog task list --plain"
+<% else %>
+run = "uv run backlog-py task list --plain"
+<% endif %>
+
+[tasks.backlog-board]
+description = "Open the task board"
+<% if task_management == 'backlog-md' %>
+run = "backlog board"
+<% else %>
+run = "uv run backlog-py board"
+<% endif %>
+<% endif %>
+<% if include_alint %>
+
+[tasks.alint-check]
+description = "Check repository structure and content"
+run = "alint check"
+
+[tasks.alint-fix]
+description = "Apply safe repository-structure fixes"
+run = "alint fix"
+<% endif %>
 
 [tasks.maintenance]
 description = "Update hooks and lockfile"

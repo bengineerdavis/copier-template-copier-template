@@ -1,8 +1,8 @@
 version = 1
 agents = [
-    "opencode",
+  "opencode",
 ]
 skills = [
-    { name = "commit-hygiene", source = "bengineerdavis/ai-prompt-library" },
-    { name = "review-best-practices", source = "bengineerdavis/ai-prompt-library" },
+  { name = "commit-hygiene", source = "bengineerdavis/ai-prompt-library" },
+  { name = "review-best-practices", source = "bengineerdavis/ai-prompt-library" },
 ]

@@ -65,6 +65,25 @@ include_template_extensions:
   help: Include support for local extensions
   default: false
 
+include_openspec:
+  type: bool
+  help: Include OpenSpec for spec-driven changes and shared agent skills
+  default: false
+
+task_management:
+  type: str
+  help: Markdown-native task management for repository-wide work
+  choices:
+    None: none
+    Backlog.md: backlog-md
+    backlog-md-py (Python): backlog-md-py
+  default: none
+
+include_alint:
+  type: bool
+  help: Include alint repository-structure linting
+  default: false
+
 all_python_versions:
   type: yaml
   default: |

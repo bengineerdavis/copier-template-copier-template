@@ -48,12 +48,20 @@ requires-python = ">= << min_python_version >>"
 
 [dependency-groups]
 dev = [
+<% if task_management == 'backlog-md-py' %>
+    # Version 2.2 rewrites Backlog.md-compatible config; keep the validated release.
+    "backlog-md-py==2.1.0; python_version >= '3.11'",
+<% endif %>
+    "mypy>=1.0,<2.0",
     "plumbum>=1.10.0",
     "prek>=0.5.5",
     "pytest>=9.0.2",
     "pytest-gitconfig>=0.9.0",
     "python-semantic-release>=10.5.3",
     "pyyaml>=6.0.3",
+    "ruff>=0.17.0",
+    "tomli>=2.0; python_version < '3.11'",
+    "types-pyyaml>=6.0",
 ]
 
 [tool.pytest]
@@ -61,6 +69,11 @@ minversion = "9.0"
 testpaths = [
     "tests",
 ]
+
+[tool.mypy]
+python_version = "<< min_python_version >>"
+warn_unused_configs = true
+ignore_missing_imports = true
 
 [tool.semantic_release]
 assets = []

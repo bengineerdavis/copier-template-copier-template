@@ -48,10 +48,29 @@ For non-interactive updates, use `--skip-answered` to reuse all existing answers
 
 Prerequisites: [uv](https://docs.astral.sh/uv/) and [mise](https://mise.jdx.dev/).
 
-Run `mise tasks` to see available commands (mise is the task runner). See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide.
+Run `mise tasks` to see available commands (mise is the task runner). See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide. Run `mise run quality` for the lint, formatting, and type-checking gates.
+<% if include_openspec or task_management != 'none' or include_alint %>
+
+## Agent workflows
+
+<% if include_openspec %>
+- [OpenSpec](https://openspec.dev/) manages spec-driven changes. Run `mise run install` to configure its shared agent skills.
+<% endif %>
+<% if task_management == 'backlog-md' %>
+- [Backlog.md](https://backlog.md/) manages repository-wide tasks. Run `mise run backlog-list` or `mise run backlog-board`.
+<% elif task_management == 'backlog-md-py' %>
+- [backlog-md-py](https://github.com/rmusser01/backlog-md-py) manages repository-wide tasks. Run `mise run backlog-list` or `mise run backlog-board`.
+<% endif %>
+<% if include_alint %>
+- [alint](https://alint.org/) checks repository structure. Run `mise run alint-check`.
+<% endif %>
+<% if include_openspec and task_management != 'none' %>
+Backlog tracks repository-wide work. OpenSpec tracks specifications and change-specific implementation checklists. See [AGENTS.md](AGENTS.md) for the combined workflow.
+<% endif %>
+<% endif %>
 
 <% if license %>
 ## License
 
 Distributed under the `<< license_type >>` license — see [LICENSE](LICENSE).<% if license_type == 'BlueOak-1.0.0' %> Read it in plain language at the [Blue Oak Council](https://blueoakcouncil.org).<% elif license_type.startswith('FSL') %> Read about the Functional Source License at [fsl.software](https://fsl.software), part of [Fair Source](https://fair.io).<% endif %>
-<% endif %>
+<% endif +%>

@@ -1,6 +1,11 @@
 ---
 extends: default
 
+# These files are managed by their respective template or CLI.
+ignore: |
+  .agentic-answers.yml
+  backlog/config.yml
+
 rules:
   # renovate version comments use single space before inline comment
   comments:

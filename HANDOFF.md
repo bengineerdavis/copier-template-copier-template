@@ -40,6 +40,21 @@ each sibling's own HANDOFF (see Related repos below).
    manager on `prek.toml` (depType `prek-hook`, grouped + automerged) —
    native support is pending in renovatebot/renovate#42254; swap the
    custom manager out when it lands.
+5. **Agentic layer adopted** (2026-10-25): the agentic-project-template CLI
+   merged its review, isolation, tasking, orchestration, and enforcement
+   layers without replacing the fork's answers, licensing, or template
+   behavior. Backlog.md tasks use `ctct-` IDs. Python practices from
+   python-project-template add Ruff format checks and Ruff/mypy quality
+   tasks; the unrelated Typer application scaffold was rejected because
+   this repository is a template rather than a CLI package.
+6. **Optional agent workflows** (2026-10-25): generated templates can
+   independently select OpenSpec, Backlog.md or backlog-md-py, and alint.
+   Selected tools include initialized files, agent guidance, mise/uv tool
+   installation, and convenience tasks. A single mutually-exclusive
+   workflow choice was rejected: Backlog tracks repository-wide work while
+   OpenSpec tracks change-specific specifications and checklists, so they
+   can coexist. Setup-command-only integration was rejected because a
+   selected tool must be usable immediately after the documented install.
 
 ## Upstream sync strategy (RESOLVED 2026-10-18 — detached)
 
@@ -70,6 +85,9 @@ semantic-release tag, move `_commit` off the raw SHA onto it.
   suffix defeats file-type detection.
 - After moving this repo, re-run `mise trust` and delete/recreate `.venv`
   (uv sync) — stale absolute paths fail to spawn.
+- Keep `backlog-md-py` at 2.1.0 until its config migration is evaluated.
+  A 2026-10-25 smoke test of 2.2.0 rewrote the Backlog.md-compatible
+  camelCase config as snake_case and cleared `projectName`.
 
 ## Next steps for this repo
 

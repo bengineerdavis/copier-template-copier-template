@@ -71,3 +71,16 @@ additional_dependencies = ["pyjson5"]
 repo = "https://github.com/compilerla/conventional-pre-commit"
 rev = "v4.4.0"
 hooks = [{ id = "conventional-pre-commit", stages = ["commit-msg"] }]
+<% if include_alint %>
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "alint-check"
+name = "alint check"
+entry = "alint check"
+language = "system"
+pass_filenames = false
+always_run = true
+<% endif %>

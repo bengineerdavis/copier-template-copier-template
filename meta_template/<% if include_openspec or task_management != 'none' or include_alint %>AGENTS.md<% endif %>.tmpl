@@ -1,0 +1,27 @@
+# Agent workflow
+<% if include_openspec %>
+
+## Spec-driven changes
+
+Use [OpenSpec](https://openspec.dev/) to propose, implement, and archive spec-driven changes. The `mise run install` command configures the shared agent skills. Run `mise run openspec-update` after upgrading OpenSpec.
+
+Keep accepted specifications in `openspec/specs/` and active changes in `openspec/changes/`. Commit these files with the related code.
+<% endif %>
+<% if task_management != 'none' %>
+
+## Task management
+
+Use <% if task_management == 'backlog-md' %>[Backlog.md](https://backlog.md/)<% else %>[backlog-md-py](https://github.com/rmusser01/backlog-md-py)<% endif %> for repository-wide tasks. Run `mise run backlog-list` to inspect work and `mise run backlog-board` to open the board.
+
+Create and edit tasks through the `<% if task_management == 'backlog-md' %>backlog<% else %>backlog-py<% endif %>` CLI. Do not edit files under `backlog/` directly. The CLI owns task metadata, file names, and relationships.
+
+<% if include_openspec %>
+Link a repository task to its OpenSpec change when both track the same work. Keep repository status in Backlog and change-specific implementation checklists in OpenSpec; do not duplicate either checklist.
+<% endif %>
+<% endif %>
+<% if include_alint %>
+
+## Repository linting
+
+Run `mise run alint-check` after changing repository structure or agent guidance. Follow the fix instructions in alint's `agent` output when available. Run `mise run alint-fix` to apply safe fixes.
+<% endif %>

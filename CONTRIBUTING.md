@@ -27,6 +27,8 @@ Run both with:
 mise run test
 ```
 
+Run `mise run quality` to check Python lint, formatting, and types. Run `mise run check` to include the agentic layer's repository-structure gates.
+
 ## Releases
 
 Releases are automated via [python-semantic-release](https://python-semantic-release.readthedocs.io/). Preview what the next release would look like with:

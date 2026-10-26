@@ -15,6 +15,7 @@ A [Copier](https://copier.readthedocs.io/) meta-template — a template that sca
 - **Optional Copier extensions**
     - [Pydantic validation](https://pypi.org/project/copier-pydantic/) for answers
     - [local Jinja extensions](https://pypi.org/project/copier-template-extensions/)
+- **Optional agent workflows** [OpenSpec](https://openspec.dev/) for spec-driven changes, [Backlog.md](https://backlog.md/) or [backlog-md-py](https://github.com/rmusser01/backlog-md-py) for Markdown-native task management, and [alint](https://alint.org/) for repository-structure linting
 
 ## Install Copier
 
@@ -56,7 +57,7 @@ For non-interactive updates, use `--skip-answered` to reuse all existing answers
 
 Prerequisites: [uv](https://docs.astral.sh/uv/) and [mise](https://mise.jdx.dev/).
 
-Run `mise tasks` to see available commands (mise is the task runner). See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide.
+Run `mise tasks` to see available commands (mise is the task runner). Run `mise run quality` for the lint, formatting, and type-checking gates. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full development guide.
 
 ### Self-hosted
 

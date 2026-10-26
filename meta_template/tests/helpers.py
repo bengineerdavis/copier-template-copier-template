@@ -4,10 +4,10 @@ from pathlib import Path
 
 from plumbum import local
 from plumbum.cmd import git as _git
-from plumbum.machines import LocalCommand
+from plumbum.commands.base import BaseCommand
 from pytest_gitconfig.plugin import DEFAULT_GIT_USER_EMAIL, DEFAULT_GIT_USER_NAME
 
-git: LocalCommand = _git.with_env(
+git: BaseCommand = _git.with_env(
     GIT_AUTHOR_NAME=DEFAULT_GIT_USER_NAME,
     GIT_AUTHOR_EMAIL=DEFAULT_GIT_USER_EMAIL,
     GIT_COMMITTER_NAME=DEFAULT_GIT_USER_NAME,

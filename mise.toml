@@ -43,6 +43,32 @@ run = "uvx --from cogapp cog -r @cog.files"
 description = "Run lints"
 run = "uv run prek run --all-files"
 
+[tasks.format]
+description = "Auto-fix lint findings and format Python"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+uv run ruff check --fix tests
+uv run ruff format tests
+'''
+
+[tasks.format-check]
+description = "Verify Python formatting and lint cleanliness"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+uv run ruff format --check tests
+uv run ruff check tests
+'''
+
+[tasks.type-check]
+description = "Type-check the template test harness"
+run = "uv run mypy tests"
+
+[tasks.quality]
+description = "Run all code-quality gates"
+depends = ["lint", "format-check", "type-check"]
+
 [tasks.maintenance]
 description = "Update hooks and lockfile"
 run = "#!/usr/bin/env bash\nset -euo pipefail\nuv run prek update\nuv lock --upgrade\n"
@@ -108,5 +134,11 @@ description = "Slow loop: deep review of the working branch, report to docs/revi
 run = "#!/usr/bin/env bash\nset -euo pipefail\nmkdir -p docs/reviews\nopencode run --agent review-deep \"Run the review-deep agent procedure for this repository.\"\n"
 
 [tasks.check]
-description = "Structure enforcement: alint + tombi lint"
-run = "#!/usr/bin/env bash\nset -euo pipefail\nalint check\ntombi lint mise.toml\n"
+description = "Run repository and Python quality gates"
+depends = ["quality"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+alint check
+tombi lint mise.toml
+'''
