@@ -1,9 +1,9 @@
 ---
 id: CTCT-1
 title: Finish agentic adoption and add workflow options
-status: In Progress
+status: Done
 created_date: 2026-10-25 20:22
-updated_date: 2026-10-25 20:59
+updated_date: 2026-10-26 18:15
 ---
 
 ## Description
@@ -27,6 +27,7 @@ Port applicable Python quality practices and add independently selectable OpenSp
 Agentic layer stamped through its merge CLI; Python practices and planning options remain to implement.
 Also add an optional alint integration for generated templates; the agentic layer already adopts alint in this repository.
 Implemented independent OpenSpec, Backlog.md/backlog-md-py, and alint options with initialized files and agent guidance. Ported Ruff/format/mypy quality gates without the Typer scaffold. Verified 37 passed / 2 skipped, quality and check gates, generated-project prek, both backlog CLIs, OpenSpec init, alint, and mise install.
+Merged through aa891f0. Evidence: 37 passed, 2 skipped; mise run check green; roborev job 165 passed with zero findings.
 <!-- SECTION:IMPLEMENTATION_NOTES:END -->
 ## Final Summary
 
