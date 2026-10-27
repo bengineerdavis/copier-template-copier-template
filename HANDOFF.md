@@ -88,6 +88,12 @@ semantic-release tag, move `_commit` off the raw SHA onto it.
 - Keep `backlog-md-py` at 2.1.0 until its config migration is evaluated.
   A 2026-10-25 smoke test of 2.2.0 rewrote the Backlog.md-compatible
   camelCase config as snake_case and cleared `projectName`.
+- The `upstream` remote's release tags (e.g. v0.18.3) leak into local
+  `copier` tag resolution: `run_copy(vcs_ref=None)` in
+  `tests/test_template.py::test_update_default` picks the highest tag among
+  *all* local refs, and upstream's v0.18.3 requires copier ≥9.19.1 while the
+  fork pins 9.18.2 — so that one test fails on a clean local tree. `origin`
+  only carries v0.18.0/v0.18.1, so CI is unaffected. Tracked as CTCT-6.
 
 ## Next steps for this repo
 
