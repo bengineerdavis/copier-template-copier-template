@@ -1,6 +1,0 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/asamarts/alint/main/schemas/v1/config.json
----
-version: 1
-extends:
-  - alint://bundled/oss-baseline@v1
-  - alint://bundled/python@v1
