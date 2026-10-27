@@ -2,6 +2,73 @@
 
 <!-- version list -->
 
+## v0.19.0 (2026-10-27)
+
+### Bug Fixes
+
+- Align recorded tool-pin behavior with renovate reality
+  ([`43d5b13`](https://github.com/bengineerdavis/copier-template-copier-template/commit/43d5b13a013bc8dd097b968c09fa0eb04696c942))
+
+- Dedupe the base alint bundle
+  ([`985873a`](https://github.com/bengineerdavis/copier-template-copier-template/commit/985873a03f8d662968954fad3fa1f9d98c5d557f))
+
+- Install alint in pre-commit CI
+  ([`7e1ceec`](https://github.com/bengineerdavis/copier-template-copier-template/commit/7e1ceecd0591f5a07481a86f1520bfabf0ad3786))
+
+- Migrate recorded license_type answer to SPDX casing
+  ([`793e8ff`](https://github.com/bengineerdavis/copier-template-copier-template/commit/793e8ff4195a410169da11c0ccd947676854eb34))
+
+- Repair generated workflow gates
+  ([`4a17f94`](https://github.com/bengineerdavis/copier-template-copier-template/commit/4a17f9416c915421433e60bb363b71a9ef904f70))
+
+- Run prek update in the maintenance task
+  ([`3f11b99`](https://github.com/bengineerdavis/copier-template-copier-template/commit/3f11b990b3d94ad629359964f9374c7710813567))
+
+- Run update-opencode.sh on stock macOS
+  ([`e2bf798`](https://github.com/bengineerdavis/copier-template-copier-template/commit/e2bf7988cd4328e5457a70e77087b7c679150158))
+
+- Track HEAD in the self-update task
+  ([`ae55377`](https://github.com/bengineerdavis/copier-template-copier-template/commit/ae55377a321d257297d717bb6fd67b7aafbde05b))
+
+### Documentation
+
+- Correct renovate app install guidance
+  ([`8127f04`](https://github.com/bengineerdavis/copier-template-copier-template/commit/8127f04644deee334fbde04b8533440d94b030dd))
+
+- Note upstream tag-bleed gotcha
+  ([`0795c9d`](https://github.com/bengineerdavis/copier-template-copier-template/commit/0795c9d65bf343fcd301bf9feb04c55ce874a3b0))
+
+- Record base/layer architecture and vocabulary
+  ([`b422d95`](https://github.com/bengineerdavis/copier-template-copier-template/commit/b422d957d6bdfd343fe981085d4dcf429c93248a))
+
+- Record declined upstream contributions
+  ([`4fe3245`](https://github.com/bengineerdavis/copier-template-copier-template/commit/4fe3245276fb93fba10fda93fecce02882486ba9))
+
+### Features
+
+- Add configurable development workflows
+  ([`2f6316a`](https://github.com/bengineerdavis/copier-template-copier-template/commit/2f6316aa5c7994a194e0d296d3c8f8f4f7f38f36))
+
+- Generate prek-native hook configuration
+  ([`90fa5d3`](https://github.com/bengineerdavis/copier-template-copier-template/commit/90fa5d3a7f2f2dafd4892afd53f030aa9ed1b4a8))
+
+- Keep pinned tools current on a schedule
+  ([`c2bb61f`](https://github.com/bengineerdavis/copier-template-copier-template/commit/c2bb61f713fbbedb8c4ccd9e2a4abb1fba856ec0))
+
+- Make alint rulesets selectable per profile
+  ([`5cc838c`](https://github.com/bengineerdavis/copier-template-copier-template/commit/5cc838c0a743b11d814f4264c6e049afcca81969))
+
+### Refactoring
+
+- Drop hardcoded alint config template
+  ([`22f5914`](https://github.com/bengineerdavis/copier-template-copier-template/commit/22f5914783987c94f6d3ef1bfaa4bc32a6dfa2a1))
+
+### Testing
+
+- Allow action digest updates
+  ([`aa891f0`](https://github.com/bengineerdavis/copier-template-copier-template/commit/aa891f03fd55118d2804bbc3a216f4ca5b47fc5a))
+
+
 ## v0.18.1 (2026-09-08)
 
 ### Bug Fixes
