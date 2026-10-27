@@ -1,8 +1,9 @@
 [tools]
 uv = "latest"
-# Deliberate pin: the template targets Python 3.12 (pyproject
-# requires-python). Renovate advances it within 3.12.x only; crossing to a
-# new minor is a template decision, not a tooling one.
+# Deliberate pin, fully manual: the template targets Python 3.12
+# (pyproject requires-python), and crossing minors is a template decision.
+# Renovate is disabled for python (renovate.json) rather than trusted to
+# respect the two-component version syntax.
 python = "3.12"
 "npm:@sentry/dotagents" = "latest"
 "github:asamarts/alint" = "latest"

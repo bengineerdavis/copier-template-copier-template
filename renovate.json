@@ -169,6 +169,15 @@
     },
     {
       "matchDepNames": [
+        "python"
+      ],
+      "matchManagers": [
+        "mise"
+      ],
+      "enabled": false
+    },
+    {
+      "matchDepNames": [
         "http:opencode"
       ],
       "enabled": false

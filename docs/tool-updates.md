@@ -41,14 +41,19 @@ refresh an existing machine.
 
 ## Deliberate exceptions
 
-- `python = "3.12"` — the template targets Python 3.12 (`requires-python`).
-  Renovate advances it within 3.12.x only; crossing to a new minor is a
-  deliberate template decision, because consumer projects pin the same
-  floor.
-- `opencode` via `http:` backend — kept deliberately because the aqua/npm
-  streams lag the opencode.ai 2.x line; the scheduled workflow and
-  committed checksums make that safe (a mismatched checksum fails
-  `mise install` closed).
+- `python = "3.12"` — the template targets Python 3.12 (`requires-python`),
+  and crossing minors (or picking patches) is a template decision, so
+  Renovate is disabled for it outright (`matchDepNames: ["python"]`).
+  Without that rule the pin's protection would be accidental: Renovate
+  reads the two-component `3.12` as an invalid semver and simply proposes
+  nothing — normalizing it to `3.12.4` would let the automerged group move
+  Python across minors unreviewed.
+- `opencode` via `http:` backend — kept for two reasons: the `-baseline`
+  x64 assets (compatible with pre-AVX2 CPUs, which the registry recipes do
+  not guarantee) and explicit, committed checksums (a mismatch fails
+  `mise install` closed). npm's stream demonstrably lags 2.x; the aqua
+  recipe currently proxies opencode.ai assets anyway, but switching would
+  surrender checksum control and the baseline choice.
 
 ## Operational notes
 
@@ -56,8 +61,10 @@ refresh an existing machine.
   with your GitHub login — no separate account).
 - GitHub disables scheduled workflows after 60 days without repo activity;
   ordinary commits re-arm them, or trigger `tool-bump` manually.
-- The `http:opencode` pin is explicitly disabled in Renovate
-  (`matchDepNames: ["http:opencode"]`) so the two schedulers never race.
+- The `http:opencode` disable rule in `renovate.json` is future-proofing:
+  Renovate's mise manager already skips `http:`-backend tools entirely, so
+  no dep is extracted to race with the workflow today. The rule keeps that
+  guarantee explicit if Renovate ever grows http support.
 
 ## Local verification
 
