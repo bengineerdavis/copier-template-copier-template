@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 try:
     import tomllib
@@ -17,6 +19,11 @@ import yaml
 def _read_toml(path: Path) -> dict:
     with path.open('rb') as file:
         return tomllib.load(file)
+
+
+def _alint_extends(sub_project: Path) -> list[str]:
+    config = yaml.safe_load((sub_project / '.alint.yml').read_text())
+    return config['extends']
 
 
 def test_default_excludes_workflow_options(sub_project: Path) -> None:
@@ -91,8 +98,11 @@ def test_backlog_enabled(sub_project: Path, task_management: str) -> None:
 
 @pytest.mark.parametrize('sub_project', [{'include_alint': True}], indirect=True)
 def test_alint_enabled(sub_project: Path) -> None:
-    config = yaml.safe_load((sub_project / '.alint.yml').read_text())
-    assert 'alint://bundled/oss-baseline@v1' in config['extends']
+    assert _alint_extends(sub_project) == [
+        'alint://bundled/oss-baseline@v1',
+        'alint://bundled/python@v1',
+        'alint://bundled/ci/github-actions@v1',
+    ]
 
     mise = _read_toml(sub_project / 'mise.toml')
     assert mise['tools']['github:asamarts/alint'] == '0.20.1'
@@ -119,6 +129,93 @@ def test_alint_enabled(sub_project: Path) -> None:
         for index, step in enumerate(steps)
         if step.get('uses', '').startswith('j178/prek-action@')
     )
+
+
+@pytest.mark.parametrize(
+    ('sub_project', 'expected'),
+    [
+        (
+            {'include_alint': True, 'alint_profile': 'minimal'},
+            [
+                'alint://bundled/oss-baseline@v1',
+                'alint://bundled/ci/github-actions@v1',
+            ],
+        ),
+        (
+            {'include_alint': True, 'alint_profile': 'python'},
+            [
+                'alint://bundled/oss-baseline@v1',
+                'alint://bundled/python@v1',
+                'alint://bundled/ci/github-actions@v1',
+            ],
+        ),
+        (
+            {'include_alint': True, 'alint_profile': 'python-agentic'},
+            [
+                'alint://bundled/oss-baseline@v1',
+                'alint://bundled/python@v1',
+                'alint://bundled/agent-hygiene@v1',
+                'alint://bundled/agent-context@v1',
+                'alint://bundled/ci/github-actions@v1',
+            ],
+        ),
+    ],
+    indirect=['sub_project'],
+)
+def test_alint_profiles(sub_project: Path, expected: list[str]) -> None:
+    assert _alint_extends(sub_project) == expected
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [
+        {
+            'include_alint': True,
+            'alint_profile': 'custom',
+            'alint_extra_bundles': ['docs/adr', 'versioning'],
+        }
+    ],
+    indirect=True,
+)
+def test_alint_custom_extras(sub_project: Path) -> None:
+    assert _alint_extends(sub_project) == [
+        'alint://bundled/oss-baseline@v1',
+        'alint://bundled/docs/adr@v1',
+        'alint://bundled/versioning@v1',
+        'alint://bundled/ci/github-actions@v1',
+    ]
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [
+        {
+            'include_alint': True,
+            'vcs_platform': 'gitlab',
+            'alint_profile': 'custom',
+            'alint_extra_bundles': ['versioning'],
+        }
+    ],
+    indirect=True,
+)
+def test_alint_ci_bundle_is_github_only(sub_project: Path) -> None:
+    assert _alint_extends(sub_project) == [
+        'alint://bundled/oss-baseline@v1',
+        'alint://bundled/versioning@v1',
+    ]
+
+
+def test_alint_rejects_unknown_alias(
+    sub_project_factory: Callable[[dict[str, Any] | None], Path],
+) -> None:
+    with pytest.raises(ValueError, match='Unknown alint bundle aliases: bogus'):
+        sub_project_factory(
+            {
+                'include_alint': True,
+                'alint_profile': 'custom',
+                'alint_extra_bundles': ['bogus'],
+            }
+        )
 
 
 @pytest.mark.parametrize(

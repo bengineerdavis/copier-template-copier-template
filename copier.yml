@@ -84,6 +84,60 @@ include_alint:
   help: Include alint repository-structure linting
   default: false
 
+# Hidden whitelist of alint bundle aliases. Each alias maps to
+# alint://bundled/<alias>@v1 at render time; this list is the single source of
+# truth for validation and the custom selection help.
+alint_bundle_aliases:
+  type: yaml
+  default: |
+    - oss-baseline
+    - python
+    - agent-hygiene
+    - agent-context
+    - apache/governance
+    - ci/github-actions
+    - compliance/apache-2
+    - compliance/reuse
+    - docs/adr
+    - dotnet
+    - go
+    - hygiene/lockfiles
+    - hygiene/no-tracked-artifacts
+    - java
+    - monorepo
+    - monorepo/cargo-workspace
+    - monorepo/pnpm-workspace
+    - monorepo/yarn-workspace
+    - node
+    - php
+    - rust
+    - toolchain-pins
+    - tooling/editorconfig
+    - versioning
+  when: false
+
+alint_profile:
+  type: str
+  help: alint ruleset profile for the generated project
+  choices:
+    Minimal (oss-baseline only): minimal
+    Python: python
+    Python with agentic hygiene: python-agentic
+    Custom (choose additional bundles below): custom
+  default: python
+  when: "<< include_alint >>"
+
+alint_extra_bundles:
+  type: yaml
+  help: Extra alint bundle aliases added to the chosen profile (e.g. docs/adr, versioning).
+  default: "[]"
+  when: "<< include_alint >>"
+  validator: >-
+    << ('Unknown alint bundle aliases: '
+    ~ (alint_extra_bundles | reject('in', alint_bundle_aliases) | list | join(', ')))
+    if (alint_extra_bundles | reject('in', alint_bundle_aliases) | list)
+    else '' >>
+
 all_python_versions:
   type: yaml
   default: |

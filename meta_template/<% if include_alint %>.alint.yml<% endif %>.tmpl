@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/asamarts/alint/main/schemas/v1/config.json
+---
+version: 1
+extends:
+  - alint://bundled/oss-baseline@v1
+<% set _profile_bundles = {
+     'minimal': [],
+     'python': ['python'],
+     'python-agentic': ['python', 'agent-hygiene', 'agent-context'],
+     'custom': [],
+   } %>
+<% set _chosen = (_profile_bundles.get(alint_profile, []) + (alint_extra_bundles or [])) | unique | list %>
+<% if vcs_platform == 'github' and 'ci/github-actions' not in _chosen %>
+<% set _chosen = _chosen + ['ci/github-actions'] %>
+<% endif %>
+<% for _bundle in _chosen %>
+  - alint://bundled/<< _bundle >>@v1
+<% endfor %>
