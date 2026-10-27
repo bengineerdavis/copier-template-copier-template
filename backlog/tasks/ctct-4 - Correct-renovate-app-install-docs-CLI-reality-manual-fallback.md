@@ -1,9 +1,9 @@
 ---
 id: CTCT-4
 title: 'Correct renovate app install docs: CLI reality + manual fallback'
-status: In Progress
+status: Done
 created_date: 2026-10-27 19:14
-updated_date: 2026-10-27 19:14
+updated_date: 2026-10-27 19:21
 ---
 
 ## Description
@@ -22,7 +22,7 @@ docs/tool-updates.md links a nonexistent app slug (mend-renovate; the real app i
 ## Implementation Notes
 
 <!-- SECTION:IMPLEMENTATION_NOTES:BEGIN -->
-
+Merged as 8127f04 (docs: correct renovate app install guidance). Review 192 fail (gh browse rejects bare URLs) -> amended; re-review 195 pass, zero findings; 192 closed. Install verified impossible via CLI/API for third-party apps (browser consent by design; enterprise-only API route).
 <!-- SECTION:IMPLEMENTATION_NOTES:END -->
 
 ## Final Summary
