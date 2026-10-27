@@ -57,8 +57,18 @@ refresh an existing machine.
 
 ## Operational notes
 
-- Renovate needs the Mend Renovate App installed on the repository (once,
-  with your GitHub login — no separate account).
+- Renovate runs as the Mend Renovate GitHub App
+  (https://github.com/apps/renovate — the slug is `renovate`, not
+  `mend-renovate`), installed once with your GitHub login and no separate
+  account. There is no CLI or API install path for third-party apps: GitHub
+  requires the interactive consent page by design (the only API install
+  route is enterprise-admin scoped), so the fallback is one click: open
+  https://github.com/apps/renovate/installations/new in a browser
+  (`xdg-open` on Linux, `open` on macOS — note `gh browse` rejects bare
+  URLs) and choose "All repositories" (zero-touch for every future repo on
+  the account) or "Only select repositories" + this repo for a smaller
+  blast radius. Verify afterwards with `gh pr list --author "app/renovate"`:
+  the onboarding PR is the first thing Renovate opens.
 - GitHub disables scheduled workflows after 60 days without repo activity;
   ordinary commits re-arm them, or trigger `tool-bump` manually.
 - The `http:opencode` disable rule in `renovate.json` is future-proofing:
