@@ -191,6 +191,25 @@ def test_alint_custom_extras(sub_project: Path) -> None:
     [
         {
             'include_alint': True,
+            'alint_profile': 'custom',
+            'alint_extra_bundles': ['oss-baseline', 'docs/adr'],
+        }
+    ],
+    indirect=True,
+)
+def test_alint_extras_dedupe_base_bundle(sub_project: Path) -> None:
+    assert _alint_extends(sub_project) == [
+        'alint://bundled/oss-baseline@v1',
+        'alint://bundled/docs/adr@v1',
+        'alint://bundled/ci/github-actions@v1',
+    ]
+
+
+@pytest.mark.parametrize(
+    'sub_project',
+    [
+        {
+            'include_alint': True,
             'vcs_platform': 'gitlab',
             'alint_profile': 'custom',
             'alint_extra_bundles': ['versioning'],
