@@ -11,14 +11,26 @@ set -euo pipefail
 
 MISE_TOML=${1:-mise.toml}
 
-# Asset names per platform; keep in sync with the block they replace.
+# Asset names per platform (parallel arrays: platform[i] <-> assets[i]);
+# keep in sync with the block they replace. Indexed arrays, not associative:
+# stock macOS still ships bash 3.2, which lacks `declare -A`.
 platforms=(linux-x64 linux-arm64 macos-x64 macos-arm64)
-declare -A assets=(
-  [linux-x64]="opencode-linux-x64-baseline.tar.gz"
-  [linux-arm64]="opencode-linux-arm64.tar.gz"
-  [macos-x64]="opencode-darwin-x64-baseline.zip"
-  [macos-arm64]="opencode-darwin-arm64.zip"
+assets=(
+  opencode-linux-x64-baseline.tar.gz
+  opencode-linux-arm64.tar.gz
+  opencode-darwin-x64-baseline.zip
+  opencode-darwin-arm64.zip
 )
+
+# sha256sum is coreutils; macOS only ships shasum.
+if command -v sha256sum > /dev/null 2>&1; then
+  hash_stdin() { sha256sum | awk '{print $1}'; }
+elif command -v shasum > /dev/null 2>&1; then
+  hash_stdin() { shasum -a 256 | awk '{print $1}'; }
+else
+  echo "update-opencode: need sha256sum or shasum on PATH" >&2
+  exit 1
+fi
 
 # Newest stable v2.x tag on the upstream mirror of opencode.ai's releases.
 # git ls-remote needs no auth and has no API rate limit.
@@ -49,11 +61,11 @@ fi
 echo "update-opencode: $current -> $latest"
 
 # Stream each asset and hash it; pipefail aborts on a truncated download.
-declare -A sums=()
-for platform in "${platforms[@]}"; do
-  url="https://opencode.ai/files/bin/$latest/${assets[$platform]}"
+sums=()
+for i in "${!platforms[@]}"; do
+  url="https://opencode.ai/files/bin/$latest/${assets[$i]}"
   echo "update-opencode: fetching $url"
-  sums[$platform]=$(curl -fsSL "$url" | sha256sum | awk '{print $1}')
+  sums+=("$(curl -fsSL "$url" | hash_stdin)")
 done
 
 # Regenerate the block, then splice it over the old one: from the header
@@ -63,11 +75,11 @@ trap 'rm -f "$block"' EXIT
 {
   echo '[tools."http:opencode"]'
   echo "version = \"$latest\""
-  for platform in "${platforms[@]}"; do
+  for i in "${!platforms[@]}"; do
     echo
-    echo "[tools.\"http:opencode\".platforms.$platform]"
-    echo "url = \"https://opencode.ai/files/bin/$latest/${assets[$platform]}\""
-    echo "checksum = \"sha256:${sums[$platform]}\""
+    echo "[tools.\"http:opencode\".platforms.${platforms[$i]}]"
+    echo "url = \"https://opencode.ai/files/bin/$latest/${assets[$i]}\""
+    echo "checksum = \"sha256:${sums[$i]}\""
   done
   echo
 } > "$block"
