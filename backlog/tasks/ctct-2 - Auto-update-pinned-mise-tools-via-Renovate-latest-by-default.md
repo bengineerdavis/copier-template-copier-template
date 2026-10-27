@@ -1,9 +1,9 @@
 ---
 id: CTCT-2
 title: Auto-update pinned mise tools via Renovate (latest by default)
-status: In Progress
+status: Done
 created_date: 2026-10-27 06:21
-updated_date: 2026-10-27 06:21
+updated_date: 2026-10-27 17:58
 ---
 
 ## Description
@@ -24,7 +24,7 @@ The http:opencode pin in mise.toml went stale (2.0.32 while upstream is 2.1.4) b
 ## Implementation Notes
 
 <!-- SECTION:IMPLEMENTATION_NOTES:BEGIN -->
-
+Merged to main as c2bb61f (feat: scheduled tool updates: renovate mise manager for aqua-backed pins + tool-bump workflow/scripts for opencode 2.0.32->2.2.0), e2bf798 (macOS portability), 43d5b13 (doc/rule accuracy). Fast loop: 182 fail (2 low) -> fixed; 187/188 pass with zero findings; review 182 closed with resolution comment. Gate: mise run check green (3 pre-existing repo infos). opencode --version verifies 2.2.0 via mise. Remaining (user): install Mend Renovate App; push main.
 <!-- SECTION:IMPLEMENTATION_NOTES:END -->
 
 ## Final Summary
