@@ -159,6 +159,19 @@
       ],
       "groupName": "prek hooks",
       "automerge": true
+    },
+    {
+      "matchManagers": [
+        "mise"
+      ],
+      "groupName": "mise tools",
+      "automerge": true
+    },
+    {
+      "matchDepNames": [
+        "http:opencode"
+      ],
+      "enabled": false
     }
   ],
   "lockFileMaintenance": {

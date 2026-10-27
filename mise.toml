@@ -1,31 +1,40 @@
 [tools]
 uv = "latest"
+# Deliberate pin: the template targets Python 3.12 (pyproject
+# requires-python). Renovate advances it within 3.12.x only; crossing to a
+# new minor is a template decision, not a tooling one.
 python = "3.12"
 "npm:@sentry/dotagents" = "latest"
 "github:asamarts/alint" = "latest"
 "github:kenn-io/roborev" = "latest"
-prek = "0.5.2"
-tombi = "1.5.5"
-worktrunk = "0.80.0"
+# Concrete pins exist for reproducible installs, not to freeze versions:
+# Renovate keeps them current and automerges (docs/tool-updates.md).
+prek = "0.5.7"
+tombi = "1.9.6"
+worktrunk = "0.81.0"
 
+# Renovate cannot own this pin: upstream (opencode.ai, mirrored at
+# anomalyco/opencode) publishes 2.x as git tags with no GitHub release
+# objects, and Renovate cannot rewrite checksums. `mise run tool-bump`
+# (scheduled workflow) bumps version, URLs, and checksums atomically.
 [tools."http:opencode"]
-version = "2.0.32"
+version = "2.2.0"
 
 [tools."http:opencode".platforms.linux-x64]
-url = "https://opencode.ai/files/bin/2.0.32/opencode-linux-x64-baseline.tar.gz"
-checksum = "sha256:8adfbefe1d697b5d1774ab8d31630303543aa0676b9aa15d94ceb8e80a5bff69"
+url = "https://opencode.ai/files/bin/2.2.0/opencode-linux-x64-baseline.tar.gz"
+checksum = "sha256:6d597970a8cc448f1b9a9f645532584b339dd3ab9583bb5f063f13d83e54768f"
 
 [tools."http:opencode".platforms.linux-arm64]
-url = "https://opencode.ai/files/bin/2.0.32/opencode-linux-arm64.tar.gz"
-checksum = "sha256:c2e4f6c94f2e58a2df99cc9647bd37285569600d7435e3796152825d8c9d10382"
+url = "https://opencode.ai/files/bin/2.2.0/opencode-linux-arm64.tar.gz"
+checksum = "sha256:1f1ce0fc07b9245a815ffa9d652dbb80e6b0f07e5bf74ea87d2b1c0339fbac52"
 
 [tools."http:opencode".platforms.macos-x64]
-url = "https://opencode.ai/files/bin/2.0.32/opencode-darwin-x64-baseline.zip"
-checksum = "sha256:25f788c18d46664d6aac8983c1a412ec169d3ff87f754e93f5026b6d1d03da6b"
+url = "https://opencode.ai/files/bin/2.2.0/opencode-darwin-x64-baseline.zip"
+checksum = "sha256:bda15562402475e891d39de5938de7ce052a245f9fd926ab72d32f55b1e26ac3"
 
 [tools."http:opencode".platforms.macos-arm64]
-url = "https://opencode.ai/files/bin/2.0.32/opencode-darwin-arm64.zip"
-checksum = "sha256:e431e369025ba9554445d0ea8ad65457fbca59aa385ca790724ec6ab488d271b"
+url = "https://opencode.ai/files/bin/2.2.0/opencode-darwin-arm64.zip"
+checksum = "sha256:c71b1cd96541539ad38e2a75377d2f43d2a27567289a14371a182e9a0800db3d"
 
 [tasks.install]
 description = "Bootstrap dev setup: sync dependencies and register prek hooks"
@@ -74,6 +83,10 @@ depends = ["lint", "format-check", "type-check"]
 [tasks.maintenance]
 description = "Update hooks and lockfile"
 run = "#!/usr/bin/env bash\nset -euo pipefail\nuv run prek update\nuv lock --upgrade\n"
+
+[tasks.tool-bump]
+description = "Bump the opencode pin (version, URLs, checksums) to the newest upstream release"
+run = "./scripts/update-opencode.sh"
 
 [tasks.update-template]
 description = "Update this repo from its own template (self-hosted)"

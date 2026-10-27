@@ -1,0 +1,58 @@
+---
+name: tool-bump
+
+# Scheduled updates for the one tool pin Renovate cannot own (opencode:
+# upstream publishes 2.x as git tags without GitHub release objects, and
+# the pin carries per-platform checksums Renovate cannot recompute).
+# Everything registry-resolvable is Renovate's job instead — see
+# docs/tool-updates.md. Runs weekly and on demand; a PR is opened only
+# when the pin actually moves.
+
+"on":
+  schedule:
+    - cron: "14 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  opencode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2
+        with:
+          install_args: github:asamarts/alint tombi
+      - name: Bump opencode pin
+        run: ./scripts/update-opencode.sh
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet mise.toml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Check
+        if: steps.diff.outputs.changed == 'true'
+        run: mise run check
+      - name: Open PR
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(awk -F'"' '/^\[tools\."http:opencode"\]$/ {f = 1; next} f && /^version/ {print $2; exit}' mise.toml)
+          branch="chore/opencode-${version}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git commit -am "chore: bump opencode to ${version}"
+          git push --force-with-lease origin "$branch"
+          gh pr create --title "chore: bump opencode to ${version}" \
+            --body "Scheduled bump by the tool-bump workflow: version, URLs, and checksums updated atomically." \
+            --head "$branch" \
+            || gh pr edit "$branch" --title "chore: bump opencode to ${version}"
