@@ -20,3 +20,9 @@ This repository carries an agentic layer managed by
 - **Experiments:** record repeated AI usage worth converting to deterministic
   tooling in `docs/experiments.md`.
 <!-- END managed: agentic-project-template -->
+
+<!-- This section is maintained by the coding agent via lore (https://github.com/BYK/loreai) -->
+## Long-term Knowledge
+
+For long-term knowledge entries managed by [lore](https://github.com/BYK/loreai) (gotchas, patterns, decisions, architecture), see [`.lore.md`](.lore.md) in the project root.
+<!-- End lore-managed section -->
