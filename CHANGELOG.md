@@ -2,6 +2,30 @@
 
 <!-- version list -->
 
+## v0.19.1 (2026-11-04)
+
+### Bug Fixes
+
+- Keep generated TOML formatting stable
+  ([`450ef0e`](https://github.com/bengineerdavis/copier-template-copier-template/commit/450ef0e7021200b297759b7084eacf31d5713cf3))
+
+- Preserve generated prek hook repositories
+  ([`93b8e21`](https://github.com/bengineerdavis/copier-template-copier-template/commit/93b8e21363fee3f50575fec67e8c4fee351d0d7d))
+
+- Support Python 3.10 in prek template test
+  ([`2716508`](https://github.com/bengineerdavis/copier-template-copier-template/commit/2716508d5989bfde3101e6722fb31d467b3a735c))
+
+### Documentation
+
+- Record base/layer, profile, and LSP drafts
+  ([`3f09aa5`](https://github.com/bengineerdavis/copier-template-copier-template/commit/3f09aa5f66cdcb84216c6cd6bc0c0ce651bdc746))
+
+### Testing
+
+- Verify complete generated hook configuration
+  ([`3b237e7`](https://github.com/bengineerdavis/copier-template-copier-template/commit/3b237e7d7dc4ca7409d94902b081a32515617938))
+
+
 ## v0.19.0 (2026-10-27)
 
 ### Bug Fixes
