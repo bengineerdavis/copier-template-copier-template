@@ -21,6 +21,7 @@ id = "check-yaml"
 
 [[repos.hooks]]
 id = "check-toml"
+exclude = "^uv\\.lock$"
 
 [[repos.hooks]]
 id = "check-json"
@@ -57,6 +58,7 @@ args = [
 [[repos.hooks]]
 id = "ruff-format"
 
+# uv-lock owns the generated lockfile's formatting.
 [[repos]]
 repo = "https://github.com/astral-sh/uv-pre-commit"
 rev = "0.13.1"
@@ -118,7 +120,7 @@ stages = [
 
 [[repos]]
 repo = "https://github.com/tombi-toml/tombi-pre-commit"
-rev = "v1.2.0"
+rev = "v1.9.6"
 
 [[repos.hooks]]
 id = "tombi-lint"
@@ -131,6 +133,7 @@ id = "tombi-format"
 args = [
   "--offline",
 ]
+exclude = "^uv\\.lock$"
 
 [[repos]]
 repo = "local"

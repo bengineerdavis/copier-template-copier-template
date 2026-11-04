@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 
 import pytest
+import tomllib
 import yaml
 
 
@@ -35,3 +38,11 @@ def test_template_style(
     assert actual_var_end == expected_var_end
     assert expected_var_start in config['_answers_file']
     assert expected_var_end in config['_answers_file']
+
+
+def test_generated_prek_config_parses_and_leaves_lock_formatting_to_uv(
+    sub_project_factory: Callable[[dict[str, Any] | None], Path],
+) -> None:
+    sub_project = sub_project_factory({'include_alint': True})
+    config = tomllib.loads((sub_project / 'prek.toml').read_text())
+    assert config['exclude'] == '^uv\\.lock$'
