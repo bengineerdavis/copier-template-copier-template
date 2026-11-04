@@ -4,6 +4,28 @@ Policy: **latest by default**. Concrete pins in `mise.toml` exist for
 reproducible installs, not to freeze versions; every pin has a scheduled
 update path and lands in CI-checked, automerge-eligible PRs.
 
+## Strategies (and their prerequisites)
+
+Templates generated from this meta-template ask for a
+`tool_update_strategy` when created; `mise run check-tool-updates` reports
+what is missing for the chosen one:
+
+| Strategy | What runs | Prerequisites (checked) |
+|---|---|---|
+| `github-app` (default) | Mend Renovate app opens the PRs | app installed on the repo — browser consent only, no CLI/API install path exists |
+| `actions-github-token` | weekly `renovate.yml` workflow | workflow pushed to the default branch; no secrets. **Limitation:** GitHub blocks GITHUB_TOKEN from committing `.github/workflows/**`, so workflow-file pins (action digests, setup-uv, mise-action) never update in this mode — the stamped config disables those managers; use `actions-pat` if workflow updates matter |
+| `actions-pat` | weekly `renovate.yml` workflow | workflow pushed; `RENOVATE_TOKEN` secret (fine-grained PAT: Contents, Pull requests, Workflows — read+write) |
+| `none` | nothing scheduled | none — no config is stamped; `mise run maintenance` still refreshes lockfiles |
+
+Trade-off of the GITHUB_TOKEN variant: Renovate's PRs do not trigger
+`pull_request` CI (GitHub's recursion rule), so automerge proceeds without
+pre-merge checks; on-push CI catches breakage after merge. The PAT variant
+gets full CI but the token needs creating and rotating. Never run the app
+and the workflow together — double PRs.
+
+This repository itself uses `github-app` plus the tool-bump workflow below
+for the one pin Renovate cannot own.
+
 ## Scheduled flow
 
 Two mechanisms, cleanly partitioned:
@@ -57,18 +79,10 @@ refresh an existing machine.
 
 ## Operational notes
 
-- Renovate runs as the Mend Renovate GitHub App
-  (https://github.com/apps/renovate — the slug is `renovate`, not
-  `mend-renovate`), installed once with your GitHub login and no separate
-  account. There is no CLI or API install path for third-party apps: GitHub
-  requires the interactive consent page by design (the only API install
-  route is enterprise-admin scoped), so the fallback is one click: open
-  https://github.com/apps/renovate/installations/new in a browser
-  (`xdg-open` on Linux, `open` on macOS — note `gh browse` rejects bare
-  URLs) and choose "All repositories" (zero-touch for every future repo on
-  the account) or "Only select repositories" + this repo for a smaller
-  blast radius. Verify afterwards with `gh pr list --author "app/renovate"`:
-  the onboarding PR is the first thing Renovate opens.
+- This repository's strategy is the hosted app (see Strategies above);
+  `mise run check-tool-updates` verifies its prerequisites plus the
+  opencode tool-bump workflow, and is the source of truth for what is
+  currently missing.
 - GitHub disables scheduled workflows after 60 days without repo activity;
   ordinary commits re-arm them, or trigger `tool-bump` manually.
 - The `http:opencode` disable rule in `renovate.json` is future-proofing:

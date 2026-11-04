@@ -138,6 +138,23 @@ alint_extra_bundles:
     if (alint_extra_bundles | reject('in', alint_bundle_aliases) | list)
     else '' >>
 
+tool_update_platform_is_github:
+  type: bool
+  default: "<< vcs_platform == 'github' >>"
+  when: false
+  help: Internal — whether the Actions-based strategies are applicable
+
+tool_update_strategy:
+  type: str
+  when: "<< tool_update_platform_is_github >>"
+  help: How should pinned dev-tool versions (renovate.json) stay current?
+  choices:
+    GitHub App (hosted; one-click install, no secrets): github-app
+    Actions + GITHUB_TOKEN (no secrets; no workflow updates, no CI on PRs): actions-github-token
+    Actions + PAT secret (full CI; token to create and rotate): actions-pat
+    None (no config stamped; nothing schedules updates): none
+  default: "<< 'github-app' if tool_update_platform_is_github else 'none' >>"
+
 all_python_versions:
   type: yaml
   default: |

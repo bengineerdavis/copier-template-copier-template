@@ -69,6 +69,26 @@
     }
   ],
   "packageRules": [
+<% if tool_update_strategy == 'actions-github-token' %>
+    {
+      "description": "GITHUB_TOKEN cannot push .github/workflows/** changes (GitHub blocks workflow-scope writes from App tokens), so the github-actions manager and the two workflow-file customManagers are disabled in this mode; workflow pins go stale until the strategy is switched to the PAT variant or the app",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Disable the setup-uv and mise-action workflow-file customManagers for the same GITHUB_TOKEN limitation",
+      "matchDepNames": [
+        "astral-sh/uv",
+        "jdx/mise"
+      ],
+      "matchFileNames": [
+        ".github/workflows/**"
+      ],
+      "enabled": false
+    },
+<% endif %>
     {
       "matchDatasources": [
         "docker"
