@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+import stat
 from pathlib import Path
 from typing import Any
 
@@ -53,3 +55,56 @@ def test_update_default(
         unsafe=True,  # set to False if unsafe features not needed for template
     )
     assert (tmp_path / worker.answers_relpath).exists()
+
+
+@pytest.mark.parametrize(
+    ('strategy', 'expect_config', 'expect_workflow', 'token_ref'),
+    [
+        ('github-app', True, False, None),
+        ('actions-github-token', True, True, 'secrets.GITHUB_TOKEN'),
+        ('actions-pat', True, True, 'secrets.RENOVATE_TOKEN'),
+        ('none', False, False, None),
+    ],
+)
+def test_tool_update_strategy(
+    template_dir: Path,
+    tmp_path: Path,
+    mock_answers_required_without_defaults: dict[str, Any],
+    strategy: str,
+    expect_config: bool,
+    expect_workflow: bool,
+    token_ref: str | None,
+) -> None:
+    worker = run_copy(
+        str(template_dir),
+        tmp_path,
+        vcs_ref='HEAD',
+        defaults=True,
+        data={
+            **mock_answers_required_without_defaults,
+            'tool_update_strategy': strategy,
+        },
+        unsafe=True,
+    )
+    renovate_json = tmp_path / 'renovate.json'
+    assert renovate_json.exists() is expect_config
+    if expect_config:
+        json.loads(renovate_json.read_text())
+
+    workflow = tmp_path / '.github' / 'workflows' / 'renovate.yml'
+    assert workflow.exists() is expect_workflow
+    if expect_workflow:
+        content = workflow.read_text()
+        assert token_ref is not None
+        assert token_ref in content
+        assert (
+            'renovatebot/github-action@2804199d260ad00c1fae0e9e842888369391c776'
+            in content
+        )
+
+    check = tmp_path / 'scripts' / 'check-tool-updates.sh'
+    assert check.exists()
+    assert check.stat().st_mode & stat.S_IXUSR
+
+    answers = (tmp_path / worker.answers_relpath).read_text()
+    assert f'tool_update_strategy: {strategy}' in answers

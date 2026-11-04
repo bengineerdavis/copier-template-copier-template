@@ -84,6 +84,16 @@ include_alint:
   help: Include alint repository-structure linting
   default: false
 
+tool_update_strategy:
+  type: str
+  help: How should pinned dev-tool versions (renovate.json) stay current?
+  choices:
+    GitHub App (Mend hosts Renovate; one-click browser install, no secrets): github-app
+    GitHub Actions + GITHUB_TOKEN (no app or secrets; its PRs don't trigger CI until merged): actions-github-token
+    GitHub Actions + PAT secret (PRs get CI; requires creating and rotating a token): actions-pat
+    None (config stamped but nothing schedules it): none
+  default: github-app
+
 all_python_versions:
   type: yaml
   default: |

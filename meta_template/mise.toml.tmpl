@@ -26,6 +26,7 @@ uv run prek install
 <% if include_openspec %>
 openspec init --tools agents
 <% endif %>
+./scripts/check-tool-updates.sh
 '''
 
 [tasks.test]
@@ -119,6 +120,10 @@ set -euo pipefail
 uv run prek update
 uv lock --upgrade
 '''
+
+[tasks.check-tool-updates]
+description = "Report prerequisites for the configured tool-update strategy"
+run = "./scripts/check-tool-updates.sh"
 
 [tasks.update-template]
 description = "Update from the upstream << template_name >> template"
