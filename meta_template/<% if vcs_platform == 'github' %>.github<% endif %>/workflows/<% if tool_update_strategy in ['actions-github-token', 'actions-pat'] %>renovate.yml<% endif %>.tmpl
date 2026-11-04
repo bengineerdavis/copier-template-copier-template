@@ -4,7 +4,9 @@ name: renovate
 # Self-hosted Renovate: keeps pinned dev-tool versions current without the
 # Mend hosted app. With GITHUB_TOKEN, PRs opened here do not trigger
 # `pull_request` workflows (GitHub's recursion rule) — on-push CI catches
-# breakage after merge. With a PAT, PRs get full CI.
+# breakage after merge — and GitHub blocks GITHUB_TOKEN from committing
+# workflow files entirely, so the stamped config disables workflow-file
+# managers in that mode (the PAT variant keeps them).
 
 "on":
   schedule:

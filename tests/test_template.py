@@ -89,7 +89,7 @@ def test_tool_update_strategy(
     renovate_json = tmp_path / 'renovate.json'
     assert renovate_json.exists() is expect_config
     if expect_config:
-        json.loads(renovate_json.read_text())
+        config = json.loads(renovate_json.read_text())
 
     workflow = tmp_path / '.github' / 'workflows' / 'renovate.yml'
     assert workflow.exists() is expect_workflow
@@ -101,6 +101,32 @@ def test_tool_update_strategy(
             'renovatebot/github-action@2804199d260ad00c1fae0e9e842888369391c776'
             in content
         )
+
+    if expect_config:
+        disable_rules = [
+            rule
+            for rule in config.get('packageRules', [])
+            if rule.get('enabled') is False
+        ]
+        if strategy == 'actions-github-token':
+            # GITHUB_TOKEN cannot push .github/workflows/** changes, so the
+            # workflow-file managers must be disabled in this mode.
+            managers_disabled = {
+                frozenset(rule['matchManagers'])
+                for rule in disable_rules
+                if 'matchManagers' in rule
+            }
+            assert frozenset(('github-actions',)) in managers_disabled
+            assert any(
+                '.github/workflows/**' in rule['matchFileNames']
+                for rule in disable_rules
+                if 'matchFileNames' in rule
+            )
+        else:
+            # Only the pre-existing docker pinDigest exclusion is disabled.
+            assert all(
+                rule.get('matchDatasources') == ['docker'] for rule in disable_rules
+            )
 
     check = tmp_path / 'scripts' / 'check-tool-updates.sh'
     assert check.exists()

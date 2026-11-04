@@ -13,9 +13,9 @@ what is missing for the chosen one:
 | Strategy | What runs | Prerequisites (checked) |
 |---|---|---|
 | `github-app` (default) | Mend Renovate app opens the PRs | app installed on the repo — browser consent only, no CLI/API install path exists |
-| `actions-github-token` | weekly `renovate.yml` workflow | workflow pushed to the default branch; no secrets |
+| `actions-github-token` | weekly `renovate.yml` workflow | workflow pushed to the default branch; no secrets. **Limitation:** GitHub blocks GITHUB_TOKEN from committing `.github/workflows/**`, so workflow-file pins (action digests, setup-uv, mise-action) never update in this mode — the stamped config disables those managers; use `actions-pat` if workflow updates matter |
 | `actions-pat` | weekly `renovate.yml` workflow | workflow pushed; `RENOVATE_TOKEN` secret (fine-grained PAT: Contents, Pull requests, Workflows — read+write) |
-| `none` | nothing scheduled | none — `mise run maintenance` still refreshes lockfiles |
+| `none` | nothing scheduled | none — no config is stamped; `mise run maintenance` still refreshes lockfiles |
 
 Trade-off of the GITHUB_TOKEN variant: Renovate's PRs do not trigger
 `pull_request` CI (GitHub's recursion rule), so automerge proceeds without
