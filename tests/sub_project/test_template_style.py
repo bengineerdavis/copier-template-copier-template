@@ -6,8 +6,12 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
 import pytest
-import tomllib
 import yaml
 from plumbum import local
 
