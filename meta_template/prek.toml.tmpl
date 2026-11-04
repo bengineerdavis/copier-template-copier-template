@@ -2,9 +2,7 @@
 # Validate with: prek validate-config prek.toml
 # Update pinned revisions with: mise run maintenance (runs `prek update`)
 
-# uv owns the generated lockfile's formatting and validation.
-exclude = "^uv\\.lock$"
-
+# uv owns the generated lockfile's formatting.
 default_install_hook_types = [
   "pre-commit",
   "commit-msg",
@@ -18,7 +16,7 @@ hooks = [
   { id = "trailing-whitespace" },
   { id = "check-added-large-files" },
   { id = "check-yaml" },
-  { id = "check-toml" },
+  { id = "check-toml", exclude = "^uv\\.lock$" },
   { id = "check-json" },
   { id = "check-case-conflict" },
   { id = "check-executables-have-shebangs" },
@@ -43,7 +41,7 @@ repo = "https://github.com/astral-sh/uv-pre-commit"
 rev = "0.13.1"
 hooks = [{ id = "uv-lock" }]
 
-# uv.lock is excluded above because its generator owns its formatting.
+# Only the generic TOML check excludes uv.lock; uv-lock owns its reconciliation.
 
 [[repos]]
 repo = "https://github.com/adrienverge/yamllint.git"

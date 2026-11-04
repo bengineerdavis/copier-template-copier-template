@@ -50,13 +50,13 @@ def test_generated_prek_config_parses_and_leaves_lock_formatting_to_uv(
 ) -> None:
     sub_project = sub_project_factory({'include_alint': True})
     config = tomllib.loads((sub_project / 'prek.toml').read_text())
-    assert config['exclude'] == '^uv\\.lock$'
+    assert 'exclude' not in config
     assert [hook for repo in config['repos'] for hook in repo['hooks']] == [
         {'id': 'end-of-file-fixer'},
         {'id': 'trailing-whitespace'},
         {'id': 'check-added-large-files'},
         {'id': 'check-yaml'},
-        {'id': 'check-toml'},
+        {'id': 'check-toml', 'exclude': '^uv\\.lock$'},
         {'id': 'check-json'},
         {'id': 'check-case-conflict'},
         {'id': 'check-executables-have-shebangs'},
