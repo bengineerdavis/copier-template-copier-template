@@ -3,7 +3,7 @@ id: CTCT-11
 title: Make TOML formatting deterministic across tool versions
 status: Done
 created_date: 2026-11-04 17:07
-updated_date: 2026-11-04 22:18
+updated_date: 2026-11-04 22:29
 ---
 
 ## Description
@@ -28,12 +28,14 @@ CI passed on pushed 1adc59c (run 41876313818) and 52cb94b (run 41876741889). Fol
 Fast loop: job 274 found Python 3.10 tomllib incompatibility; fixed in 4e624ce and verified on Python 3.10.17. Job 278 passed and recommended full hook attributes; strengthened in 86720d8. Jobs 274/278 closed. Job 281 passed 4e624ce with no findings. Job 282 passed the strengthened test. Merged to local main ending 8c08e89 with full local gates green.
 Published fcc376d CI passed: Tests 41911569712 across all five supported Python versions, pre-commit 41911569801, Release 41911569982. Review 300 passed the follow-up scoped exclusion: only check-toml excludes uv.lock; uv-lock and gitleaks remain eligible. Local Python 3.10 evidence: 45 passed, 2 skipped, using uv run --python 3.10 --frozen pytest -q on a tree free of upstream release tags. If upstream tags have been fetched, CTCT-6 records the independent tag-pollution failure affecting test_update_default; this does not affect the published CI evidence.
 Final scoped-exclusion merge and publication pending.
+Combined CTCT-5/CTCT-11 rebased tree: 52 passed, 2 skipped on Python 3.10; mise run check green. Formatter -> uv-lock -> formatter repeated stable. Review 301 evidence caveat addressed with the CTCT-6 precondition in the task record.
 <!-- SECTION:IMPLEMENTATION_NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
 Formatter ownership and generated prek configuration are deterministic: uv-lock remains responsible for uv.lock; only the generic TOML check excludes it. Main CI passed on fcc376d across Python 3.10-3.14, pre-commit, and Release. Final scoped-exclusion follow-up has 45 passing tests and 2 skips on Python 3.10 under the documented tag-clean precondition; merge/publication pending.
+Combined-tree verification adds 52 passing tests and 2 skips on Python 3.10.
 <!-- SECTION:FINAL_SUMMARY:END -->
 
 ## Definition of Done
