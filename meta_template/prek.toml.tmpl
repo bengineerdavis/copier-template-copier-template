@@ -58,19 +58,11 @@ hooks = [{ id = "shellcheck" }]
 [[repos]]
 repo = "https://github.com/python-jsonschema/check-jsonschema"
 rev = "0.38.0"
-
-[[repos.hooks]]
-id = "check-github-workflows"
-args = ["--verbose"]
-
-[[repos.hooks]]
-id = "check-gitlab-ci"
-args = ["--verbose"]
-
-[[repos.hooks]]
-id = "check-renovate"
-args = ["--verbose"]
-additional_dependencies = ["pyjson5"]
+hooks = [
+  { id = "check-github-workflows", args = ["--verbose"] },
+  { id = "check-gitlab-ci", args = ["--verbose"] },
+  { id = "check-renovate", args = ["--verbose"], additional_dependencies = ["pyjson5"] },
+]
 
 [[repos]]
 repo = "https://github.com/compilerla/conventional-pre-commit"
@@ -80,12 +72,7 @@ hooks = [{ id = "conventional-pre-commit", stages = ["commit-msg"] }]
 
 [[repos]]
 repo = "local"
-
-[[repos.hooks]]
-id = "alint-check"
-name = "alint check"
-entry = "alint check"
-language = "system"
-pass_filenames = false
-always_run = true
+hooks = [
+  { id = "alint-check", name = "alint check", entry = "alint check", language = "system", pass_filenames = false, always_run = true },
+]
 <% endif %>

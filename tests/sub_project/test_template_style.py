@@ -9,6 +9,7 @@ from typing import Any
 import pytest
 import tomllib
 import yaml
+from plumbum import local
 
 
 @pytest.mark.parametrize(
@@ -46,3 +47,26 @@ def test_generated_prek_config_parses_and_leaves_lock_formatting_to_uv(
     sub_project = sub_project_factory({'include_alint': True})
     config = tomllib.loads((sub_project / 'prek.toml').read_text())
     assert config['exclude'] == '^uv\\.lock$'
+    assert {hook['id'] for repo in config['repos'] for hook in repo['hooks']} == {
+        'end-of-file-fixer',
+        'trailing-whitespace',
+        'check-added-large-files',
+        'check-yaml',
+        'check-toml',
+        'check-json',
+        'check-case-conflict',
+        'check-executables-have-shebangs',
+        'check-merge-conflict',
+        'gitleaks',
+        'ruff-check',
+        'ruff-format',
+        'uv-lock',
+        'yamllint',
+        'shellcheck',
+        'check-github-workflows',
+        'check-gitlab-ci',
+        'check-renovate',
+        'conventional-pre-commit',
+        'alint-check',
+    }
+    local['prek']('validate-config', sub_project / 'prek.toml')
