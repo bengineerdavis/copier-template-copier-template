@@ -70,9 +70,10 @@ rev = "v4.4.0"
 hooks = [{ id = "conventional-pre-commit", stages = ["commit-msg"] }]
 <% if include_alint %>
 
+# Official mirror: the prebuilt alint wheel, not a source Rust build. The
+# mise-managed CLI remains available for `mise run alint-check` and the LSP.
 [[repos]]
-repo = "local"
-hooks = [
-  { id = "alint-check", name = "alint check", entry = "alint check", language = "system", pass_filenames = false, always_run = true },
-]
+repo = "https://github.com/asamarts/alint-pre-commit"
+rev = "v0.22.0"
+hooks = [{ id = "alint" }]
 <% endif %>

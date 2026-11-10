@@ -29,11 +29,11 @@ def _alint_extends(sub_project: Path) -> list[str]:
 def test_default_excludes_workflow_options(sub_project: Path) -> None:
     assert not (sub_project / 'openspec').exists()
     assert not (sub_project / 'backlog').exists()
-    assert not (sub_project / '.alint.yml').exists()
-    assert not (sub_project / 'AGENTS.md').exists()
+    assert (sub_project / '.alint.yml').exists()
+    assert (sub_project / 'AGENTS.md').exists()
 
     mise = _read_toml(sub_project / 'mise.toml')
-    assert set(mise['tools']) == {'uv', 'python'}
+    assert set(mise['tools']) == {'uv', 'python', 'github:asamarts/alint'}
     assert {'format', 'format-check', 'type-check', 'quality'} <= set(mise['tasks'])
     assert mise['tasks']['format-check']['wait_for'] == ['lint']
     assert mise['tasks']['type-check']['wait_for'] == ['lint']
@@ -105,14 +105,16 @@ def test_alint_enabled(sub_project: Path) -> None:
     ]
 
     mise = _read_toml(sub_project / 'mise.toml')
-    assert mise['tools']['github:asamarts/alint'] == '0.20.1'
+    assert mise['tools']['github:asamarts/alint'] == 'latest'
     assert 'alint-check' in mise['tasks']['quality']['depends']
 
     prek = _read_toml(sub_project / 'prek.toml')
-    local_repos = [repo for repo in prek['repos'] if repo['repo'] == 'local']
-    assert any(
-        hook['id'] == 'alint-check' for repo in local_repos for hook in repo['hooks']
+    official = next(
+        repo for repo in prek['repos'] if repo['repo'].endswith('alint-pre-commit')
     )
+    assert official['rev'] == 'v0.22.0'
+    assert official['hooks'] == [{'id': 'alint'}]
+    assert not any(repo['repo'] == 'local' for repo in prek['repos'])
     workflow = yaml.safe_load(
         (sub_project / '.github/workflows/pre-commit.yml').read_text()
     )
@@ -120,15 +122,8 @@ def test_alint_enabled(sub_project: Path) -> None:
     mise_steps = [
         step for step in steps if step.get('uses', '').startswith('jdx/mise-action@')
     ]
-    assert len(mise_steps) == 1
-    assert re.fullmatch(r'jdx/mise-action@[0-9a-f]{40}', mise_steps[0]['uses'])
-    assert mise_steps[0]['with'].get('install', True) is True
-    assert mise_steps[0]['with']['install_args'] == 'github:asamarts/alint'
-    assert steps.index(mise_steps[0]) < next(
-        index
-        for index, step in enumerate(steps)
-        if step.get('uses', '').startswith('j178/prek-action@')
-    )
+    assert len(mise_steps) == 0
+    assert steps[-1].get('uses', '').startswith('j178/prek-action@')
 
 
 @pytest.mark.parametrize(

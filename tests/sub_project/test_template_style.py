@@ -75,13 +75,6 @@ def test_generated_prek_config_parses_and_leaves_lock_formatting_to_uv(
             'additional_dependencies': ['pyjson5'],
         },
         {'id': 'conventional-pre-commit', 'stages': ['commit-msg']},
-        {
-            'id': 'alint-check',
-            'name': 'alint check',
-            'entry': 'alint check',
-            'language': 'system',
-            'pass_filenames': False,
-            'always_run': True,
-        },
+        {'id': 'alint'},
     ]
     local['prek']('validate-config', sub_project / 'prek.toml')
