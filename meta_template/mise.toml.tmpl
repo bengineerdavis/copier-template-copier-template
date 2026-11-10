@@ -13,6 +13,9 @@ python = "3.12"
 "npm:backlog.md" = "1.55.3"
 <% endif %>
 <% if include_alint %>
+# CLI for `alint lsp` and direct use. The commit check itself runs through
+# the official pre-commit hook (see prek.toml), not through a mise task —
+# one check, one owner (decision: don't retest the dependency).
 "github:asamarts/alint" = "latest"
 <% endif %>
 
@@ -72,9 +75,6 @@ depends = [
   "lint",
   "format-check",
   "type-check",
-<% if include_alint %>
-  "alint-check",
-<% endif %>
 ]
 <% if include_openspec %>
 
@@ -100,17 +100,6 @@ run = "backlog board"
 run = "uv run backlog-py board"
 <% endif %>
 <% endif %>
-<% if include_alint %>
-
-[tasks.alint-check]
-description = "Check repository structure and content"
-run = "alint check"
-
-[tasks.alint-fix]
-description = "Apply safe repository-structure fixes"
-run = "alint fix"
-<% endif %>
-
 [tasks.maintenance]
 description = "Update hooks and lockfile"
 run = '''

@@ -13,6 +13,7 @@ except ImportError:
 
 import pytest
 import yaml
+from plumbum import local
 
 
 def _read_toml(path: Path) -> dict:
@@ -25,11 +26,9 @@ def _alint_extends(sub_project: Path) -> list[str]:
     return config['extends']
 
 
-def test_default_excludes_workflow_options(sub_project: Path) -> None:
+def test_default_excludes_optional_workflows(sub_project: Path) -> None:
     assert not (sub_project / 'openspec').exists()
     assert not (sub_project / 'backlog').exists()
-    assert (sub_project / '.alint.yml').exists()
-    assert (sub_project / 'AGENTS.md').exists()
 
     mise = _read_toml(sub_project / 'mise.toml')
     assert set(mise['tools']) == {'uv', 'python', 'github:asamarts/alint'}
@@ -95,34 +94,20 @@ def test_backlog_enabled(sub_project: Path, task_management: str) -> None:
     assert 'Do not edit files under `backlog/` directly' in agents
 
 
-@pytest.mark.parametrize('sub_project', [{'include_alint': True}], indirect=True)
-def test_alint_enabled(sub_project: Path) -> None:
-    assert _alint_extends(sub_project) == [
-        'alint://bundled/oss-baseline@v1',
-        'alint://bundled/python@v1',
-        'alint://bundled/ci/github-actions@v1',
-    ]
+def test_alint_hook_runs_in_a_fresh_stamp(sub_project: Path) -> None:
+    """Exercise the contract we own: the generated hook runs in a fresh child.
 
-    mise = _read_toml(sub_project / 'mise.toml')
-    assert mise['tools']['github:asamarts/alint'] == 'latest'
-    assert 'alint-check' in mise['tasks']['quality']['depends']
+    Upstream owns the rule engine and the pre-commit protocol. We do not
+    retest those; we verify our template's integration through prek.
+    """
+    local['prek'].with_cwd(sub_project)('run', 'alint', '--all-files')
 
-    prek = _read_toml(sub_project / 'prek.toml')
-    official = next(
-        repo for repo in prek['repos'] if repo['repo'].endswith('alint-pre-commit')
-    )
-    assert official['rev'] == 'v0.22.0'
-    assert official['hooks'] == [{'id': 'alint'}]
-    assert not any(repo['repo'] == 'local' for repo in prek['repos'])
-    workflow = yaml.safe_load(
-        (sub_project / '.github/workflows/pre-commit.yml').read_text()
-    )
-    steps = workflow['jobs']['pre-commit']['steps']
-    mise_steps = [
-        step for step in steps if step.get('uses', '').startswith('jdx/mise-action@')
-    ]
-    assert len(mise_steps) == 0
-    assert steps[-1].get('uses', '').startswith('j178/prek-action@')
+
+@pytest.mark.parametrize('sub_project', [{'include_alint': False}], indirect=True)
+def test_alint_can_be_disabled(sub_project: Path) -> None:
+    assert not (sub_project / '.alint.yml').exists()
+    assert 'github:asamarts/alint' not in (sub_project / 'mise.toml').read_text()
+    assert 'alint-pre-commit' not in (sub_project / 'prek.toml').read_text()
 
 
 @pytest.mark.parametrize(

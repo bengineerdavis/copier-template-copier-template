@@ -5,6 +5,9 @@ copyright_name: Christopher Brown
 copyright_year: '2026'
 include_pydantic_validation: false
 include_template_extensions: false
+include_alint: true
+alint_profile: python-agentic
+alint_extra_bundles: []
 license_type: MIT
 min_python_version: '3.10'
 output_template_name: copier-template
