@@ -77,6 +77,10 @@ description = "Type-check the template test harness"
 wait_for = ["lint"]
 run = "uv run mypy tests"
 
+[tasks.alint-check]
+description = "Check repository structure using the mise-managed CLI"
+run = "mise exec -- github:asamarts/alint -- alint check"
+
 [tasks.quality]
 description = "Run all code-quality gates"
 depends = ["lint", "format-check", "type-check"]

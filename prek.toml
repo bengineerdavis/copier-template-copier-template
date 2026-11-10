@@ -135,13 +135,10 @@ args = [
 ]
 exclude = "^uv\\.lock$"
 
+# Official mirror: the prebuilt alint wheel. mise owns the CLI used by tasks.
 [[repos]]
-repo = "local"
+repo = "https://github.com/asamarts/alint-pre-commit"
+rev = "v0.22.0"
 
 [[repos.hooks]]
-id = "alint-check"
-name = "alint check"
-entry = "alint check"
-language = "system"
-pass_filenames = false
-always_run = true
+id = "alint"

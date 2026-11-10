@@ -82,7 +82,7 @@ task_management:
 include_alint:
   type: bool
   help: Include alint repository-structure linting
-  default: false
+  default: true
 
 # Hidden whitelist of alint bundle aliases. Each alias maps to
 # alint://bundled/<alias>@v1 at render time; this list is the single source of
