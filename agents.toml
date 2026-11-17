@@ -6,3 +6,10 @@ skills = [
   { name = "commit-hygiene", source = "bengineerdavis/ai-prompt-library" },
   { name = "review-best-practices", source = "bengineerdavis/ai-prompt-library" },
 ]
+
+[trust]
+github_repos = ["mattpocock/skills", "bengineerdavis/ai-prompt-library"]
+
+[[plugins]]
+name = "mattpocock-skills"
+source = "mattpocock/skills"
