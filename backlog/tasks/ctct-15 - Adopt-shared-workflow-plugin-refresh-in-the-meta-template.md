@@ -5,7 +5,7 @@ status: In Progress
 created_date: 2026-11-12 04:54
 assignee:
 - opencode-dotagents-projection
-updated_date: 2026-11-17 16:55
+updated_date: 2026-11-19 21:17
 ---
 
 ## Description
@@ -25,6 +25,7 @@ The agentic layer is adopted and must consume APT-47 through the ordinary update
 
 <!-- SECTION:IMPLEMENTATION_NOTES:BEGIN -->
 2026-11-17: Scoped child propagation uses the composed APT-47 fragment, not an independent plugin list. Broad update produced conflicts in agents.toml, .lore.md, and docs/experiments.md; isolated worktree was reset and no broad update is claimed. Preserving current backlog/lore/worktree choices avoids unrelated migration. Exact refresh body ran twice with a fresh test-user HOME and projected tdd, grilling, and writing-for-agents. Upstream software-factory frontmatter remains an explicit warning. Full suite 47 passed, 1 skipped; all prek hooks pass.
+2026-11-19: Parent APT-47 / agentic-project-template PR #17 merged as d8d3bf1. Child branch is current with its origin/main (no new merge required). Rebuilt stale moved venv: 47 passed, 1 skipped, 46 Copier dirty-worktree warnings caused by untracked generated artifacts; uv run prek run --all-files passed all applicable hooks. Local untracked generated files remain outside commits: .agents/skills/backlog-workflow/, .opencode/skills/, .pr-body.md, CODING_STANDARDS.md, docs/agents/, scripts/check-worktree.sh, scripts/wt-owners.sh. No broad layer update claimed.
 <!-- SECTION:IMPLEMENTATION_NOTES:END -->
 
 ## Final Summary
