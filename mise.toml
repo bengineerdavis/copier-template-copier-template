@@ -55,31 +55,29 @@ run = "uv run prek run --all-files"
 
 [tasks.format]
 description = "Auto-fix lint findings and format Python"
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-uv run ruff check --fix tests
-uv run ruff format tests
-'''
+run = "#!/usr/bin/env bash\nset -euo pipefail\nuv run ruff check --fix tests\nuv run ruff format tests\n"
 
 [tasks.format-check]
 description = "Verify Python formatting and lint cleanliness"
-wait_for = ["lint"]
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-uv run ruff format --check tests
-uv run ruff check tests
-'''
+wait_for = [
+  "lint",
+]
+run = "#!/usr/bin/env bash\nset -euo pipefail\nuv run ruff format --check tests\nuv run ruff check tests\n"
 
 [tasks.type-check]
 description = "Type-check the template test harness"
-wait_for = ["lint"]
+wait_for = [
+  "lint",
+]
 run = "uv run mypy tests"
 
 [tasks.quality]
 description = "Run all code-quality gates"
-depends = ["lint", "format-check", "type-check"]
+depends = [
+  "lint",
+  "format-check",
+  "type-check",
+]
 
 [tasks.maintenance]
 description = "Update hooks and lockfile"
@@ -151,10 +149,11 @@ run = "#!/usr/bin/env bash\nset -euo pipefail\nmkdir -p docs/reviews\nopencode r
 
 [tasks.check]
 description = "Run repository and Python quality gates"
-depends = ["quality"]
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-alint check
-tombi lint mise.toml
-'''
+depends = [
+  "quality",
+]
+run = "#!/usr/bin/env bash\nset -euo pipefail\nalint check\ntombi lint mise.toml\n"
+
+[tasks.dotagents-add]
+description = "Refresh reviewed external dependency catalogs and project them"
+run = "# Add requires project-scoped trust; later projection also reads user-scoped\n# trust. `trust add` rejects an already-trusted source, so check each scope.\n# Only these reviewed sources are trusted; other installer failures still stop.\nfor source in mattpocock/skills bengineerdavis/ai-prompt-library; do\n  grep -Fq \"\\\"$source\\\"\" agents.toml ||\n    dotagents --project trust add \"$source\"\n  grep -Fq \"\\\"$source\\\"\" \"${DOTAGENTS_HOME:-$HOME/.agents}/agents.toml\" ||\n    dotagents --user trust add \"$source\"\ndone\ndotagents --project add mattpocock/skills --all\ndotagents --project install\n"
